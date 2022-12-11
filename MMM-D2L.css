@@ -1,0 +1,13 @@
+.MMM-D2L .d2l-name {
+    text-align: right;
+}
+.MMM-D2L .align-right {
+    text-align: right;
+    width: 150px;
+}
+.MMM-D2L .bright {
+    color: var(--color-text-bright);
+}
+.title {
+    font-family: Roboto, sans-serif;
+  }

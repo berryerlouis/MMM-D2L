@@ -1,0 +1,14 @@
+{
+  "name": "mmm-d2l",
+  "version": "1.0.0",
+  "description": "A MagicMirror2 module to display d2l Linky ERL",
+  "main": "MMM-D2L.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Louis BERRYER",
+  "license": "MIT",
+  "dependencies": {
+    "xhr2": "^0.2.1"
+  }
+}
