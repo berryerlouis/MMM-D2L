@@ -43,10 +43,10 @@ function apiGet(url, apiKey, callback) {
 }
 
 
-function checkHPHC(horloge)
+function checkHPHC(configHeuresCreuses, horloge)
 {
   let heureCreuse = false;
-  this.config.heuresCreuses.forEach(heure => {
+  configHeuresCreuses.forEach(heure => {
     if(new Date(horloge).getHours() >= heure.start && new Date(horloge).getHours() <= heure.end)
     {
       heureCreuse = true;
@@ -55,7 +55,7 @@ function checkHPHC(horloge)
   return heureCreuse;
 }
 
-function parseIndex(response)
+function parseIndex(configHeuresCreuses, compteurId, response)
 {
   let hc;
   let hp;
@@ -76,7 +76,7 @@ function parseIndex(response)
       //last hour index found
       if(new Date(element.horloge) < new Date(last60Minutes))
       {
-        instant = (checkHPHC(element.horloge) ? hc : hp) - (checkHPHC(element.horloge) ? element.baseHchcEjphnBbrhcjb : element.hchpEjphpmBbrhpjb);
+        instant = (checkHPHC(configHeuresCreuses, element.horloge) ? hc : hp) - (checkHPHC(configHeuresCreuses, element.horloge) ? element.baseHchcEjphnBbrhcjb : element.hchpEjphpmBbrhpjb);
       
         //get consumed watt
         hc -= element.baseHchcEjphnBbrhcjb;
@@ -91,13 +91,21 @@ function parseIndex(response)
     }
   }
   moyPerHour = moyPerHour.reverse();
-  return {moyPerHour, instant, lastIndex:response[0], hphc:checkHPHC(response[0].horloge) }
+
+  return {
+    compteurId,
+    moyPerHour,
+    instant,
+    lastIndex:response[0],
+    hphcMode:checkHPHC(configHeuresCreuses,response[0].horloge) 
+  }
 } 
 
 module.exports = NodeHelper.create({
   apiKey: "",
   compteurId: "",
   moyPerHour:[],
+  configHeuresCreuses:[],
 
   start: function () {
     Log.log("Starting node helper for: " + this.name);
@@ -132,12 +140,13 @@ module.exports = NodeHelper.create({
       });
     }
     else if (notification === D2LApi.GET_DATA_REQ) {
+      this.configHeuresCreuses = payload.configHeuresCreuses;
       apiPost(D2LApi.APIKEY_URL, payload.login, payload.password, (response) => {
         this.apiKey = response.apiKey;
         apiGet(D2LApi.COMPTEUR_URL, this.apiKey, (response) => {
           this.compteurId = response[0].idModule;
           apiGet(D2LApi.LAST_INDEXES_URL( this.compteurId, payload.nbHoursToFetch), this.apiKey, (response) => {
-            this.sendSocketNotification(D2LApi.GET_DATA_RES, parseIndex(response));
+            this.sendSocketNotification(D2LApi.GET_DATA_RES, parseIndex(this.configHeuresCreuses,this.compteurId,response));
           });
         });
       });

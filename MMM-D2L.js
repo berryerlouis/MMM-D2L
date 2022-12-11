@@ -6,12 +6,12 @@ Module.register("MMM-D2L", {
 		updateInterval: 60000,
 		login: "",
 		password: "",
-		nbHoursToFetch:24,
-		heuresCreuses:[
-			{start:0,end:6},
-			{start:11,end:14},
+		nbHoursToFetch: 24,
+		heuresCreuses: [
+			{ start: 0, end: 6 },
+			{ start: 11, end: 14 },
 		],
-		contract : 6000
+		contract: 6000
 	},
 	chart: undefined,
 
@@ -22,14 +22,14 @@ Module.register("MMM-D2L", {
 	start: function () {
 		//create dom lastIndexs
 		this.wrapper = document.createElement("div");
-		this.title = document.createElement("div");
-		this.title.className = "title";
-		this.title.innerText = "Linky"
-		this.wrapper.appendChild(this.title);
+		let title = document.createElement("div");
+		title.className = "title";
+		title.innerText = "Linky"
+		this.wrapper.appendChild(title);
 
-		this.table = document.createElement("table");
-		this.table.className = "MMM-D2L";
-		this.content = document.createElement("tbody");
+		table = document.createElement("table");
+		table.className = "MMM-D2L";
+		let content = document.createElement("tbody");
 
 		let row = document.createElement("tr");
 		let hc_name = document.createElement("td");
@@ -42,7 +42,7 @@ Module.register("MMM-D2L", {
 		hc_index.innerText = "0"
 		row.appendChild(hc_name);
 		row.appendChild(hc_index);
-		this.content.appendChild(row);
+		content.appendChild(row);
 
 		row = document.createElement("tr");
 		let hp_name = document.createElement("td");
@@ -55,7 +55,7 @@ Module.register("MMM-D2L", {
 		hp_index.innerText = "0"
 		row.appendChild(hp_name);
 		row.appendChild(hp_index);
-		this.content.appendChild(row);
+		content.appendChild(row);
 
 		row = document.createElement("tr");
 		let instant_name = document.createElement("td");
@@ -65,12 +65,12 @@ Module.register("MMM-D2L", {
 		instant_index.className = "align-right bright";
 		instant_index.setAttribute('id', 'INSTANT');
 		instant_index.innerText = "0"
-		row.appendChild(instant_name); 
+		row.appendChild(instant_name);
 		row.appendChild(instant_index);
-		this.content.appendChild(row);
+		content.appendChild(row);
 
-		this.table.appendChild(this.content);
-		this.wrapper.appendChild(this.table);
+		table.appendChild(content);
+		this.wrapper.appendChild(table);
 
 		let div = document.createElement("div");
 		let myChart = document.createElement("canvas");
@@ -78,18 +78,18 @@ Module.register("MMM-D2L", {
 		myChart.setAttribute('style', 'margin-left: auto;');
 		div.appendChild(myChart);
 		this.wrapper.appendChild(div);
-		
+
 		Log.info(`Starting module: ${this.name}`);
 		this.fetchData();
 		this.updateTimer = setInterval(() => this.fetchData(), this.config.updateInterval);
 	},
 
 	getScripts: function () {
-        return [
+		return [
 			"d2l.js",
 			"https://cdn.jsdelivr.net/npm/chart.js"
-		]; 
-    },
+		];
+	},
 
 	getDom: function () {
 		return this.wrapper;
@@ -103,23 +103,30 @@ Module.register("MMM-D2L", {
 
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === D2LApi.GET_DATA_RES) {
+			let compteurId = payload.compteurId;
 			let moyPerHour = payload.moyPerHour;
 			let instant = payload.instant;
 			let lastIndex = payload.lastIndex;
-			let hphc = payload.hphc;
-			this.updateChart(moyPerHour,instant,lastIndex,hphc);
+			let hphcMode = payload.hphcMode;
+			this.updateChart(compteurId, moyPerHour, instant, lastIndex, hphcMode);
 			Log.info(`${this.name} : indexes received`);
 		}
 	},
 
 	fetchData: function () {
 		Log.info(`${this.name} : fetch data`);
-		this.sendSocketNotification(D2LApi.GET_DATA_REQ, { login: this.config.login, password: this.config.password, nbHoursToFetch: this.config.nbHoursToFetch });
+		this.sendSocketNotification(D2LApi.GET_DATA_REQ,
+			{ 
+				login: this.config.login,
+				password: this.config.password,
+				configHeuresCreuses: this.config.heuresCreuses,
+				nbHoursToFetch: this.config.nbHoursToFetch 
+			}
+		);
 	},
 
-	updateChart: function (moyPerHour,instant,lastIndex,hphc) {
-		if(hphc)
-		{
+	updateChart: function (compteurId, moyPerHour, instant, lastIndex, hphc) {
+		if (hphc) {
 			document.getElementById('HC-name').className = "d2l-name bright";
 			document.getElementById('HP-name').className = "d2l-name";
 			document.getElementById('HP').innerHTML = lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh";
@@ -127,8 +134,7 @@ Module.register("MMM-D2L", {
 			document.getElementById('HP-name').innerHTML = "HP";
 			document.getElementById('HC-name').innerHTML = "<b>HC</b>";
 		}
-		else
-		{
+		else {
 			document.getElementById('HC-name').className = "d2l-name";
 			document.getElementById('HP-name').className = "d2l-name bright";
 			document.getElementById('HP').innerHTML = "<b>" + lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh" + "</b>";
@@ -137,13 +143,37 @@ Module.register("MMM-D2L", {
 			document.getElementById('HC-name').innerHTML = "HC";
 		}
 		document.getElementById('INSTANT').innerHTML = instant + " W";
+
 		if(this.chart == undefined)
 		{
-			this.chart = new Chart(document.getElementById('myChart'), {
-				type: 'bar',
-				data: {
-					labels: moyPerHour.map(({ hour }) => hour),
-					datasets: [
+			this.chart = this.createChart(moyPerHour);
+		}
+		else{
+			this.updateData(
+				this.chart,
+				moyPerHour.map(({ hour }) => hour),
+				[
+					moyPerHour.map(({ hc }) => hc),
+					moyPerHour.map(({ hp }) => hp)
+				]
+			);
+		}
+	},
+
+	updateData: function (chart, label, data) {
+		chart.data.labels = label;
+		chart.data.datasets[0].data = data[0];
+		chart.data.datasets[1].data = data[1];
+		chart.update();
+	},
+
+	createChart: function(moyPerHour)
+	{
+		return new Chart(document.getElementById('myChart'), {
+			type: 'bar',
+			data: {
+				labels: moyPerHour.map(({ hour }) => hour),
+				datasets: [
 					{
 						label: 'HC',
 						data: moyPerHour.map(({ hc }) => hc),
@@ -151,64 +181,44 @@ Module.register("MMM-D2L", {
 					},
 					{
 						label: 'HP',
-						data: moyPerHour.map(({ hp }) => hp),
+						data:moyPerHour.map(({ hp }) => hp),
 						borderWidth: 2,
 					},
 				]
-				},
-				options: {
-					scales: {
-						x: {
-							ticks: {
-							  	color: 'lightgrey'
-							},
-							border:
-							{
-							  color: 'lightgrey',
-							},
-							grid: {
-								color: 'lightgrey',
-							  	borderColor: 'lightgrey'
-							}
-						  },
-						  y: {
-							min:0,
-							max:this.config.contract,
-							ticks: {
-							  	color: 'lightgrey'
-							},
-							border:
-							{
-							  color: 'lightgrey',
-							},
-							grid: {
-								color: 'lightgrey',
-							  	borderColor: 'lightgrey'
-							}
-						  },
+			},
+			options: {
+				scales: {
+					x: {
+						ticks: {
+							color: 'lightgrey'
+						},
+						border:
+						{
+							color: 'lightgrey',
+						},
+						grid: {
+							color: 'lightgrey',
+							borderColor: 'lightgrey'
+						}
 					},
-				}
-			});	
-			Chart.defaults.color = 'lightgrey';
-		}
-		else
-		{
-			this.updateData(
-				this.chart, 
-				moyPerHour.map(({ hour }) => hour),
-				[
-					moyPerHour.map(({ hc }) => hc),
-					moyPerHour.map(({ hp }) => hp)
-				] 
-			);
-		}
+					y: {
+						min: 0,
+						max: this.config.contract,
+						ticks: {
+							color: 'lightgrey'
+						},
+						border:
+						{
+							color: 'lightgrey',
+						},
+						grid: {
+							color: 'lightgrey',
+							borderColor: 'lightgrey'
+						}
+					},
+				},
+			}
+		});
+		Chart.defaults.color = 'lightgrey';
 	},
-
-	updateData: function(chart, label, data) {
-		chart.data.labels = label;
-		chart.data.datasets[ 0 ].data = data[ 0 ];
-		chart.data.datasets[ 1 ].data = data[ 1 ];
-		chart.update();
-	},
-	  
 });
