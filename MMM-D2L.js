@@ -73,9 +73,9 @@ Module.register("MMM-D2L", {
 		this.wrapper.appendChild(table);
 
 		let div = document.createElement("div");
+		div.setAttribute('style', 'margin-left: auto;');
 		let myChart = document.createElement("canvas");
 		myChart.setAttribute('id', 'myChart');
-		myChart.setAttribute('style', 'margin-left: auto;');
 		div.appendChild(myChart);
 		this.wrapper.appendChild(div);
 
@@ -146,6 +146,8 @@ Module.register("MMM-D2L", {
 
 		if (this.chart == undefined) {
 			this.chart = this.createChart(moyPerHour);
+			// this.chart.canvas.parentNode.style.height = '128px';
+			// this.chart.canvas.parentNode.style.width = '128px';
 		}
 		else {
 			this.updateData(
@@ -186,7 +188,7 @@ Module.register("MMM-D2L", {
 				]
 			},
 			options: {
-				maintainAspectRatio: false,
+				maintainAspectRatio: true,
 				scales: {
 					x: {
 						ticks: {
