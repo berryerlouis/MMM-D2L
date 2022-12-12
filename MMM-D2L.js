@@ -104,11 +104,11 @@ Module.register("MMM-D2L", {
 	socketNotificationReceived: function (notification, payload) {
 		if (notification === D2LApi.GET_DATA_RES) {
 			let compteurId = payload.compteurId;
-			let moyPerHour = payload.moyPerHour;
+			let consoPerHour = payload.consoPerHour;
 			let instant = payload.instant;
 			let lastIndex = payload.lastIndex;
 			let hphcMode = payload.hphcMode;
-			this.updateChart(compteurId, moyPerHour, instant, lastIndex, hphcMode);
+			this.updateChart(compteurId, consoPerHour, instant, lastIndex, hphcMode);
 			Log.info(`${this.name} : indexes received`);
 		}
 	},
@@ -125,7 +125,7 @@ Module.register("MMM-D2L", {
 		);
 	},
 
-	updateChart: function (compteurId, moyPerHour, instant, lastIndex, hphc) {
+	updateChart: function (compteurId, consoPerHour, instant, lastIndex, hphc) {
 		if (hphc) {
 			document.getElementById('HC-name').className = "d2l-name bright";
 			document.getElementById('HP-name').className = "d2l-name";
@@ -145,17 +145,17 @@ Module.register("MMM-D2L", {
 		document.getElementById('INSTANT').innerHTML = instant + " W";
 
 		if (this.chart == undefined) {
-			this.chart = this.createChart(moyPerHour);
+			this.chart = this.createChart(consoPerHour);
 			// this.chart.canvas.parentNode.style.height = '128px';
 			// this.chart.canvas.parentNode.style.width = '128px';
 		}
 		else {
 			this.updateData(
 				this.chart,
-				moyPerHour.map(({ hour }) => hour),
+				consoPerHour.map(({ hour }) => hour),
 				[
-					moyPerHour.map(({ hc }) => hc),
-					moyPerHour.map(({ hp }) => hp)
+					consoPerHour.map(({ hc }) => hc),
+					consoPerHour.map(({ hp }) => hp)
 				]
 			);
 		}
@@ -168,21 +168,21 @@ Module.register("MMM-D2L", {
 		chart.update();
 	},
 
-	createChart: function (moyPerHour) {
+	createChart: function (consoPerHour) {
 		Chart.defaults.color = 'lightgrey';
 		return new Chart(document.getElementById('myChart'), {
 			type: 'bar',
 			data: {
-				labels: moyPerHour.map(({ hour }) => hour),
+				labels: consoPerHour.map(({ hour }) => hour),
 				datasets: [
 					{
 						label: 'HC',
-						data: moyPerHour.map(({ hc }) => hc),
+						data: consoPerHour.map(({ hc }) => hc),
 						borderWidth: 2,
 					},
 					{
 						label: 'HP',
-						data: moyPerHour.map(({ hp }) => hp),
+						data: consoPerHour.map(({ hp }) => hp),
 						borderWidth: 2,
 					},
 				]
