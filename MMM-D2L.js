@@ -145,7 +145,7 @@ Module.register("MMM-D2L", {
 			document.getElementById('HP-name').innerHTML = "<b>HP</b>";
 			document.getElementById('HC-name').innerHTML = "HC";
 		}
-		document.getElementById('INSTANT').innerHTML = instant + " W";
+		document.getElementById('INSTANT').innerHTML = parseFloat(instant).toString() + " W";
 
 		if (this.config.showChart == true) {
 			if (this.chart == undefined) {
