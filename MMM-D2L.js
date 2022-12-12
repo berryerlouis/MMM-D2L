@@ -116,11 +116,11 @@ Module.register("MMM-D2L", {
 	fetchData: function () {
 		Log.info(`${this.name} : fetch data`);
 		this.sendSocketNotification(D2LApi.GET_DATA_REQ,
-			{ 
+			{
 				login: this.config.login,
 				password: this.config.password,
 				configHeuresCreuses: this.config.heuresCreuses,
-				nbHoursToFetch: this.config.nbHoursToFetch 
+				nbHoursToFetch: this.config.nbHoursToFetch
 			}
 		);
 	},
@@ -144,11 +144,10 @@ Module.register("MMM-D2L", {
 		}
 		document.getElementById('INSTANT').innerHTML = instant + " W";
 
-		if(this.chart == undefined)
-		{
+		if (this.chart == undefined) {
 			this.chart = this.createChart(moyPerHour);
 		}
-		else{
+		else {
 			this.updateData(
 				this.chart,
 				moyPerHour.map(({ hour }) => hour),
@@ -167,8 +166,7 @@ Module.register("MMM-D2L", {
 		chart.update();
 	},
 
-	createChart: function(moyPerHour)
-	{
+	createChart: function (moyPerHour) {
 		Chart.defaults.color = 'lightgrey';
 		return new Chart(document.getElementById('myChart'), {
 			type: 'bar',
@@ -182,7 +180,7 @@ Module.register("MMM-D2L", {
 					},
 					{
 						label: 'HP',
-						data:moyPerHour.map(({ hp }) => hp),
+						data: moyPerHour.map(({ hp }) => hp),
 						borderWidth: 2,
 					},
 				]
