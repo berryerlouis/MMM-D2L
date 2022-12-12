@@ -79,12 +79,9 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
     else {
       //last hour index found
       if (new Date(element.horloge) < new Date(last60Minutes)) {
-        
-        if(instant == null)
-        {
+        if (instant == null) {
           instant = hc - element.baseHchcEjphnBbrhcjb + hp - element.hchpEjphpmBbrhpjb
         }
-        
         //get consumed watt
         hc -= element.baseHchcEjphnBbrhcjb;
         hp -= element.hchpEjphpmBbrhpjb;

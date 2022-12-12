@@ -24,7 +24,7 @@ npm install
 
 Configure the module in your `config.js` file.
 
-**Note:** After starting the Mirror, it will take a few seconds before the wallpapers start to appear.
+**Note:** After starting the Mirror, it will take a few seconds before the chart and data start to appear.
 
 ## Using the module
 
@@ -39,7 +39,7 @@ modules: [
       password: "",
       contract:6000,
       nbHoursToFetch:24,
-		  showChart: true,
+      showChart: true,
       heuresCreuses:[
         {
           start:0,
