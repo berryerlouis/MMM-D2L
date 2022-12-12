@@ -169,6 +169,7 @@ Module.register("MMM-D2L", {
 
 	createChart: function(moyPerHour)
 	{
+		Chart.defaults.color = 'lightgrey';
 		return new Chart(document.getElementById('myChart'), {
 			type: 'bar',
 			data: {
@@ -187,6 +188,7 @@ Module.register("MMM-D2L", {
 				]
 			},
 			options: {
+				maintainAspectRatio: false,
 				scales: {
 					x: {
 						ticks: {
@@ -219,6 +221,5 @@ Module.register("MMM-D2L", {
 				},
 			}
 		});
-		Chart.defaults.color = 'lightgrey';
 	},
 });
