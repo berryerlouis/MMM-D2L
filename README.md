@@ -39,6 +39,7 @@ modules: [
       password: "",
       contract:6000,
       nbHoursToFetch:24,
+		  showChart: true,
       heuresCreuses:[
         {
           start:0,
@@ -65,6 +66,7 @@ The following properties can be configured:
 |`login`|`""`|Set the login from https://d2l.sicame.io/.|
 |`password`|`""`|Set the password from https://d2l.sicame.io/.|
 |`contract`|`6000`|Set the max Watt contract subscribed.|
+|`showChart`|`true`|Show Chart.|
 |`nbHoursToFetch`|`24`|Number of hours to fetch data.|
 |`updateInterval`|`60 * 60 * 1000`|How often (in ms) to fetch data.|
 |`heuresCreuses`|`[{start:0,end:6},{start:11,end:14}]`|set the hours of each 'heures creuses' from start to end.|

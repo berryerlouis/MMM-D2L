@@ -11,7 +11,8 @@ Module.register("MMM-D2L", {
 			{ start: 0, end: 6 },
 			{ start: 11, end: 14 },
 		],
-		contract: 6000
+		contract: 6000,
+		showChart: true,
 	},
 	chart: undefined,
 
@@ -28,7 +29,7 @@ Module.register("MMM-D2L", {
 		this.wrapper.appendChild(title);
 
 		table = document.createElement("table");
-		table.className = "MMM-D2L";
+		table.className = "d2l-table";
 		let content = document.createElement("tbody");
 
 		let row = document.createElement("tr");
@@ -72,12 +73,14 @@ Module.register("MMM-D2L", {
 		table.appendChild(content);
 		this.wrapper.appendChild(table);
 
-		let div = document.createElement("div");
-		div.setAttribute('style', 'margin-left: auto;');
-		let myChart = document.createElement("canvas");
-		myChart.setAttribute('id', 'myChart');
-		div.appendChild(myChart);
-		this.wrapper.appendChild(div);
+		if (this.config.showChart == true) {
+			let div = document.createElement("div");
+			let myChart = document.createElement("canvas");
+			myChart.setAttribute('style', 'margin-left: auto;');
+			myChart.setAttribute('id', 'myChart');
+			div.appendChild(myChart);
+			this.wrapper.appendChild(div);
+		}
 
 		Log.info(`Starting module: ${this.name}`);
 		this.fetchData();
@@ -144,20 +147,20 @@ Module.register("MMM-D2L", {
 		}
 		document.getElementById('INSTANT').innerHTML = instant + " W";
 
-		if (this.chart == undefined) {
-			this.chart = this.createChart(consoPerHour);
-			// this.chart.canvas.parentNode.style.height = '128px';
-			// this.chart.canvas.parentNode.style.width = '128px';
-		}
-		else {
-			this.updateData(
-				this.chart,
-				consoPerHour.map(({ hour }) => hour),
-				[
-					consoPerHour.map(({ hc }) => hc),
-					consoPerHour.map(({ hp }) => hp)
-				]
-			);
+		if (this.config.showChart == true) {
+			if (this.chart == undefined) {
+				this.chart = this.createChart(consoPerHour);
+			}
+			else {
+				this.updateData(
+					this.chart,
+					consoPerHour.map(({ hour }) => hour),
+					[
+						consoPerHour.map(({ hc }) => hc),
+						consoPerHour.map(({ hp }) => hp)
+					]
+				);
+			}
 		}
 	},
 
@@ -188,7 +191,7 @@ Module.register("MMM-D2L", {
 				]
 			},
 			options: {
-				maintainAspectRatio: true,
+				maintainAspectRatio:true,
 				scales: {
 					x: {
 						ticks: {

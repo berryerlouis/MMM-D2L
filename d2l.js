@@ -32,4 +32,7 @@ const D2LApi = {
     LAST_CURRENTS_REQ: 'LAST_CURRENTS_REQ',
     LAST_CURRENTS_RES: 'LAST_CURRENTS_RES',
 };
-module.exports = { D2LApi }
+
+if (typeof module !== 'undefined') {
+    module.exports = { D2LApi }
+}
