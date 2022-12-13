@@ -25,7 +25,7 @@ Module.register("MMM-D2L", {
 	},
 
 	start: function () {
-		//create dom lastIndexs
+		//create dom lastIndexes
 		this.wrapper = document.createElement("div");
 		let title = document.createElement("div");
 		title.setAttribute('id', 'linkyId');
@@ -175,12 +175,12 @@ Module.register("MMM-D2L", {
 		if(trends < 0)
 		{
 			document.getElementById('trends').innerHTML = svgGraphDown;
-			document.getElementById('trends').setAttribute('style', 'color: #dc3545');
+			document.getElementById('trends').setAttribute('style', 'color: #198754');
 		}
 		else
 		{
 			document.getElementById('trends').innerHTML = svgGraphUp;
-			document.getElementById('trends').setAttribute('style', 'color: #198754');
+			document.getElementById('trends').setAttribute('style', 'color: #dc3545');
 		}
 
 		if (this.config.showChart == true) {
