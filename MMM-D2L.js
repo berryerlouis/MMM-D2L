@@ -158,7 +158,7 @@ Module.register("MMM-D2L", {
 			//redefine id for all elements only for the first element
 			document.getElementById('linkyId').setAttribute('id', 'linkyId' + compteurId);
 			document.getElementById('hc-name').setAttribute('id', 'hc-name' + compteurId);
-			document.getElementById('hc-name').setAttribute('id', 'hp-name' + compteurId);
+			document.getElementById('hp-name').setAttribute('id', 'hp-name' + compteurId);
 			document.getElementById('HC').setAttribute('id', 'HC' + compteurId);
 			document.getElementById('HP').setAttribute('id', 'HP' + compteurId);
 			document.getElementById('instant').setAttribute('id', 'instant' + compteurId);
