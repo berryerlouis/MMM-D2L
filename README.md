@@ -2,7 +2,7 @@
 The module allows you to fetch data from Linky D2L module, see https://d2l.sicame.io/ for more information.
 
 ## UI
-![UI](mmm-d2l.png)
+![UI](ui-d2l.png)
 
 ## Installation
 
