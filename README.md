@@ -75,7 +75,7 @@ The following properties can be configured:
 
 ## Notifications
 
-MMM-Wallpaper can react to the following notifications sent by other modules:
+MMM-D2L can react to the following notifications sent by other modules:
 
 |Notification|Payload|Description|
 |---|---|---|
