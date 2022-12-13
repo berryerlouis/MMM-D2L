@@ -1,16 +1,20 @@
 .d2l-table .d2l-name {
     text-align: right;
 }
+
 .d2l-table .d2l-tr {
     margin-bottom: 5px;
 }
+
 .d2l-table .align-right {
     text-align: right;
     width: 150px;
 }
+
 .d2l-table .bright {
     color: var(--color-text-bright);
 }
+
 .title {
     font-family: Roboto, sans-serif;
-  }
+}
