@@ -168,6 +168,10 @@ Module.register("MMM-D2L", {
 			document.getElementById('HP-name').innerHTML = "<b>HP</b>";
 			document.getElementById('HC-name').innerHTML = "HC";
 		}
+		if(this.config.showCompteurId)
+		{
+			document.getElementById('linkyId').innerHTML = "Linky : " + compteurId;
+		}
 		document.getElementById('instant').innerHTML = parseFloat(instant).toString() + " W";
 		if(trends < 0)
 		{
