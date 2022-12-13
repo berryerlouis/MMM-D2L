@@ -15,7 +15,7 @@ Module.register("MMM-D2L", {
 			{ start: 11, end: 14 },
 		],
 		contract: 6000,
-		showCompteurId: true,
+		showCompteurId: false,
 		showChart: true,
 	},
 	chart: undefined,

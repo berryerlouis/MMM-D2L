@@ -67,7 +67,7 @@ The following properties can be configured:
 |`login`|`""`|Set the login from https://d2l.sicame.io/.|
 |`password`|`""`|Set the password from https://d2l.sicame.io/.|
 |`contract`|`6000`|Set the max Watt contract subscribed.|
-|`showCompteurId`|`true`|Show 'Compteur Id'.|
+|`showCompteurId`|`false`|Show 'Compteur Id'.|
 |`showChart`|`true`|Show Chart.|
 |`nbHoursToFetch`|`24`|Number of hours to fetch data.|
 |`updateInterval`|`60 * 60 * 1000`|How often (in ms) to fetch data.|
