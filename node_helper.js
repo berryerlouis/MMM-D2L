@@ -91,7 +91,7 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
         }
         else {
           //second relative hour, computed trends
-          trends = (consoHC + consoHP) - instant;
+          trends = instant - (consoHC + consoHP);
         }
         //save
         consoPerHour.push({ hour: new Date(element.horloge).getHours() + ":00", consoHC, consoHP });
