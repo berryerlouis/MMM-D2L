@@ -26,7 +26,11 @@ Module.register("MMM-D2L", {
 	start: function () {
 		//create dom lastIndexes
 		this.wrapper = document.createElement("div");
+<<<<<<< HEAD
 		this.createUI(this.wrapper, null);
+=======
+		this.createUI(this.wrapper, "");
+>>>>>>> 7910c97 (add multiple d2l module)
 		Log.info(`Starting module: ${this.name}`);
 		this.fetchData();
 		this.updateTimer = setInterval(() => this.fetchData(), this.config.updateInterval);
