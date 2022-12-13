@@ -165,6 +165,9 @@ Module.register("MMM-D2L", {
 			document.getElementById('instant').setAttribute('id', 'instant' + moduleId);
 			document.getElementById('trends').setAttribute('id', 'trends' + moduleId);
 			document.getElementById('chartConso').setAttribute('id', 'chartConso' + moduleId);
+			if (this.config.showChart == true) {
+				this.createChart(moduleId, consoPerHour);
+			}
 		}
 		else if (document.getElementById('linkyId' + moduleId) === undefined) {
 			//create new UI
@@ -187,10 +190,10 @@ Module.register("MMM-D2L", {
 			document.getElementById('hp-name' + moduleId).innerHTML = "<b>HP</b>";
 			document.getElementById('hc-name' + moduleId).innerHTML = "HC";
 		}
+		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
 		if (this.config.showCompteurId) {
 			document.getElementById('linkyId' + moduleId).innerHTML = "Linky : " + moduleId;
 		}
-		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
 		if (trends < 0) {
 			document.getElementById('trends' + moduleId).innerHTML = svgGraphDown;
 			document.getElementById('trends' + moduleId).setAttribute('style', 'color: #198754');
@@ -201,26 +204,20 @@ Module.register("MMM-D2L", {
 		}
 
 		if (this.config.showChart == true) {
-			if (document.getElementById('chartConso' + moduleId) == undefined) {
-				this.createChart(moduleId, consoPerHour);
-			}
-			else {
-				this.updateData(
-					moduleId,
-					consoPerHour.map(({ hour }) => hour),
-					[
-						consoPerHour.map(({ consoHC }) => consoHC),
-						consoPerHour.map(({ consoHP }) => consoHP)
-					]
-				);
-			}
+			this.updateData(
+				moduleId,
+				consoPerHour.map(({ hour }) => hour),
+				[
+					consoPerHour.map(({ consoHC }) => consoHC),
+					consoPerHour.map(({ consoHP }) => consoHP)
+				]
+			);
 		}
 	},
 
 	updateData: function (chartId, label, data) {
 		this.charts.forEach(chart => {
-			if(chart.moduleId == chartId)
-			{
+			if (chart.moduleId == chartId) {
 				chart.chart.data.labels = label;
 				chart.chart.data.datasets[0].data = data[0];
 				chart.chart.data.datasets[1].data = data[1];
