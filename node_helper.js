@@ -63,7 +63,7 @@ function checkHPHC(configHeuresCreuses, horloge) {
   return heureCreuse;
 }
 
-function parseIndex(configHeuresCreuses, compteurId, response) {
+function parseIndex(configHeuresCreuses, moduleId, response) {
   let consoHC;
   let consoHP;
   let last60Minutes;
@@ -105,7 +105,7 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
   consoPerHour = consoPerHour.reverse();
 
   return {
-    compteurId,
+    moduleId,
     consoPerHour,
     instant,
     trends,
@@ -123,18 +123,18 @@ module.exports = NodeHelper.create({
 
   socketNotificationReceived: function (notification, payload) {
     if (notification === D2LApi.LAST_CURRENT_REQ) {
-      apiGet(D2LApi.LAST_CURRENT_URL(payload.compteurId), payload.apiKey, (response) => {
-        this.sendSocketNotification(D2LApi.LAST_CURRENT_RES, { compteurId: payload.compteurId, response: response });
+      apiGet(D2LApi.LAST_CURRENT_URL(payload.moduleId), payload.apiKey, (response) => {
+        this.sendSocketNotification(D2LApi.LAST_CURRENT_RES, { moduleId: payload.moduleId, response: response });
       });
     }
     else if (notification === D2LApi.LAST_INDEX_REQ) {
-      apiGet(D2LApi.LAST_INDEX_URL(payload.compteurId), payload.apiKey, (response) => {
-        this.sendSocketNotification(D2LApi.LAST_INDEX_RES, { compteurId: payload.compteurId, response: response });
+      apiGet(D2LApi.LAST_INDEX_URL(payload.moduleId), payload.apiKey, (response) => {
+        this.sendSocketNotification(D2LApi.LAST_INDEX_RES, { moduleId: payload.moduleId, response: response });
       });
     }
     else if (notification === D2LApi.LAST_INDEXES_REQ) {
-      apiGet(D2LApi.LAST_INDEXES_URL(payload.compteurId, payload.nbHoursToFetch), payload.apiKey, (response) => {
-        this.sendSocketNotification(D2LApi.LAST_INDEXES_RES, { compteurId: payload.compteurId, response: response });
+      apiGet(D2LApi.LAST_INDEXES_URL(payload.moduleId, payload.nbHoursToFetch), payload.apiKey, (response) => {
+        this.sendSocketNotification(D2LApi.LAST_INDEXES_RES, { moduleId: payload.moduleId, response: response });
       });
     }
     else if (notification === D2LApi.COMPTEUR_REQ) {
