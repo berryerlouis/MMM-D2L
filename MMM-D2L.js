@@ -33,6 +33,7 @@ Module.register("MMM-D2L", {
 		let content = document.createElement("tbody");
 
 		let row = document.createElement("tr");
+		row.className = "d2l-tr";
 		let hc_name = document.createElement("td");
 		let hc_index = document.createElement("td");
 		hc_name.className = "d2l-name";
@@ -46,6 +47,7 @@ Module.register("MMM-D2L", {
 		content.appendChild(row);
 
 		row = document.createElement("tr");
+		row.className = "d2l-tr";
 		let hp_name = document.createElement("td");
 		let hp_index = document.createElement("td");
 		hp_name.className = "d2l-name";
@@ -57,17 +59,31 @@ Module.register("MMM-D2L", {
 		row.appendChild(hp_name);
 		row.appendChild(hp_index);
 		content.appendChild(row);
-
+		
 		row = document.createElement("tr");
+		row.className = "d2l-tr";
 		let instant_name = document.createElement("td");
 		let instant_index = document.createElement("td");
 		instant_name.className = "d2l-name";
-		instant_name.innerText = "Instant"
+		instant_name.innerText = "Consomation dernière heure"
 		instant_index.className = "align-right bright";
-		instant_index.setAttribute('id', 'INSTANT');
+		instant_index.setAttribute('id', 'instant');
 		instant_index.innerText = "0"
 		row.appendChild(instant_name);
 		row.appendChild(instant_index);
+		content.appendChild(row);
+
+		row = document.createElement("tr");
+		row.className = "d2l-tr";
+		let trends_name = document.createElement("td");
+		let trends_index = document.createElement("td");
+		trends_name.className = "d2l-name";
+		trends_name.innerText = "Tendance de consomation"
+		trends_index.className = "align-right bright";
+		trends_index.setAttribute('id', 'trends');
+		trends_index.innerText = "0"
+		row.appendChild(trends_name);
+		row.appendChild(trends_index);
 		content.appendChild(row);
 
 		table.appendChild(content);
@@ -109,9 +125,10 @@ Module.register("MMM-D2L", {
 			let compteurId = payload.compteurId;
 			let consoPerHour = payload.consoPerHour;
 			let instant = payload.instant;
+			let trends = payload.trends;
 			let lastIndex = payload.lastIndex;
 			let hphcMode = payload.hphcMode;
-			this.updateChart(compteurId, consoPerHour, instant, lastIndex, hphcMode);
+			this.updateChart(compteurId, consoPerHour, instant, trends, lastIndex, hphcMode);
 			Log.info(`${this.name} : indexes received`);
 		}
 	},
@@ -128,7 +145,7 @@ Module.register("MMM-D2L", {
 		);
 	},
 
-	updateChart: function (compteurId, consoPerHour, instant, lastIndex, hphc) {
+	updateChart: function (compteurId, consoPerHour, instant, trends, lastIndex, hphc) {
 		if (hphc) {
 			document.getElementById('HC-name').className = "d2l-name bright";
 			document.getElementById('HP-name').className = "d2l-name";
@@ -145,7 +162,8 @@ Module.register("MMM-D2L", {
 			document.getElementById('HP-name').innerHTML = "<b>HP</b>";
 			document.getElementById('HC-name').innerHTML = "HC";
 		}
-		document.getElementById('INSTANT').innerHTML = parseFloat(instant).toString() + " W";
+		document.getElementById('instant').innerHTML = parseFloat(instant).toString() + " W";
+		document.getElementById('trends').innerHTML = parseFloat(trends).toString() + " W";
 
 		if (this.config.showChart == true) {
 			if (this.chart == undefined) {
