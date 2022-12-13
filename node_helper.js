@@ -115,8 +115,6 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
 }
 
 module.exports = NodeHelper.create({
-  apiKey: "",
-  compteurId: "",
   configHeuresCreuses: [],
 
   start: function () {
@@ -124,7 +122,6 @@ module.exports = NodeHelper.create({
   },
 
   socketNotificationReceived: function (notification, payload) {
-    Log.log(this.name + " : " + notification);
     if (notification === D2LApi.LAST_CURRENT_REQ) {
       apiGet(D2LApi.LAST_CURRENT_URL(payload.compteurId), payload.apiKey, (response) => {
         this.sendSocketNotification(D2LApi.LAST_CURRENT_RES, { compteurId: payload.compteurId, response: response });
@@ -142,22 +139,23 @@ module.exports = NodeHelper.create({
     }
     else if (notification === D2LApi.COMPTEUR_REQ) {
       apiGet(D2LApi.COMPTEUR_URL, payload.apiKey, (response) => {
-        this.sendSocketNotification(D2LApi.COMPTEUR_RES, response);
+        this.sendSocketNotification(D2LApi.COMPTEUR_RES, response.idModule);
       });
     }
     else if (notification === D2LApi.APIKEY_REQ) {
       apiPost(D2LApi.APIKEY_URL, payload.login, payload.password, (response) => {
-        this.sendSocketNotification(D2LApi.APIKEY_RES, response);
+        this.sendSocketNotification(D2LApi.APIKEY_RES, response.apiKey);
       });
     }
     else if (notification === D2LApi.GET_DATA_REQ) {
       this.configHeuresCreuses = payload.configHeuresCreuses;
       apiPost(D2LApi.APIKEY_URL, payload.login, payload.password, (response) => {
-        this.apiKey = response.apiKey;
-        apiGet(D2LApi.COMPTEUR_URL, this.apiKey, (response) => {
-          this.compteurId = response[0].idModule;
-          apiGet(D2LApi.LAST_INDEXES_URL(this.compteurId, payload.nbHoursToFetch), this.apiKey, (response) => {
-            this.sendSocketNotification(D2LApi.GET_DATA_RES, parseIndex(this.configHeuresCreuses, this.compteurId, response));
+        const apiKey = response.apiKey;
+        apiGet(D2LApi.COMPTEUR_URL, apiKey, (response) => {
+          response.forEach(compteur => {
+            apiGet(D2LApi.LAST_INDEXES_URL(compteur.idModule, payload.nbHoursToFetch), apiKey, (response) => {
+              this.sendSocketNotification(D2LApi.GET_DATA_RES, parseIndex(this.configHeuresCreuses, compteur.idModule, response));
+            });
           });
         });
       });

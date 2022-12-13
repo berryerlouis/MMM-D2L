@@ -18,7 +18,6 @@ Module.register("MMM-D2L", {
 		showCompteurId: false,
 		showChart: true,
 	},
-	chart: undefined,
 
 	getStyles: function () {
 		return ["MMM-D2L.css"];
@@ -27,11 +26,18 @@ Module.register("MMM-D2L", {
 	start: function () {
 		//create dom lastIndexes
 		this.wrapper = document.createElement("div");
+		this.createUI(this.wrapper, null);
+		Log.info(`Starting module: ${this.name}`);
+		this.fetchData();
+		this.updateTimer = setInterval(() => this.fetchData(), this.config.updateInterval);
+	},
+
+	createUI: function (divWrapper, compteurId) {
 		let title = document.createElement("div");
-		title.setAttribute('id', 'linkyId');
+		title.setAttribute('id', 'linkyId' + compteurId);
 		title.className = "title bright";
 		title.innerText = "Linky"
-		this.wrapper.appendChild(title);
+		divWrapper.appendChild(title);
 
 		table = document.createElement("table");
 		table.className = "d2l-table";
@@ -43,9 +49,9 @@ Module.register("MMM-D2L", {
 		let hc_index = document.createElement("td");
 		hc_name.className = "d2l-name";
 		hc_name.innerText = "HC"
-		hc_name.setAttribute('id', 'HC-name');
+		hc_name.setAttribute('id', 'hc-name' + compteurId);
 		hc_index.className = "align-right bright";
-		hc_index.setAttribute('id', 'HC');
+		hc_index.setAttribute('id', 'HC' + compteurId);
 		hc_index.innerText = "0"
 		row.appendChild(hc_name);
 		row.appendChild(hc_index);
@@ -57,14 +63,14 @@ Module.register("MMM-D2L", {
 		let hp_index = document.createElement("td");
 		hp_name.className = "d2l-name";
 		hp_name.innerText = "HP"
-		hp_name.setAttribute('id', 'HP-name');
+		hp_name.setAttribute('id', 'hp-name' + compteurId);
 		hp_index.className = "align-right bright";
-		hp_index.setAttribute('id', 'HP');
+		hp_index.setAttribute('id', 'HP' + compteurId);
 		hp_index.innerText = "0"
 		row.appendChild(hp_name);
 		row.appendChild(hp_index);
 		content.appendChild(row);
-		
+
 		row = document.createElement("tr");
 		row.className = "d2l-tr";
 		let instant_name = document.createElement("td");
@@ -72,7 +78,7 @@ Module.register("MMM-D2L", {
 		instant_name.className = "d2l-name";
 		instant_name.innerText = "Consomation dernière heure"
 		instant_index.className = "align-right bright";
-		instant_index.setAttribute('id', 'instant');
+		instant_index.setAttribute('id', 'instant' + compteurId);
 		instant_index.innerText = "0"
 		row.appendChild(instant_name);
 		row.appendChild(instant_index);
@@ -85,27 +91,23 @@ Module.register("MMM-D2L", {
 		trends_name.className = "d2l-name";
 		trends_name.innerText = "Tendance de consomation"
 		trends_index.className = "align-right bright";
-		trends_index.setAttribute('id', 'trends');
+		trends_index.setAttribute('id', 'trends' + compteurId);
 		trends_index.innerHTML = svgGraphDown;
 		row.appendChild(trends_name);
 		row.appendChild(trends_index);
 		content.appendChild(row);
 
 		table.appendChild(content);
-		this.wrapper.appendChild(table);
+		divWrapper.appendChild(table);
 
 		if (this.config.showChart == true) {
 			let div = document.createElement("div");
-			let myChart = document.createElement("canvas");
-			myChart.setAttribute('style', 'margin-left: auto;');
-			myChart.setAttribute('id', 'myChart');
-			div.appendChild(myChart);
-			this.wrapper.appendChild(div);
+			let chartConso = document.createElement("canvas");
+			chartConso.setAttribute('style', 'margin-left: auto;');
+			chartConso.setAttribute('id', 'chartConso' + compteurId);
+			div.appendChild(chartConso);
+			divWrapper.appendChild(div);
 		}
-
-		Log.info(`Starting module: ${this.name}`);
-		this.fetchData();
-		this.updateTimer = setInterval(() => this.fetchData(), this.config.updateInterval);
 	},
 
 	getScripts: function () {
@@ -151,45 +153,59 @@ Module.register("MMM-D2L", {
 	},
 
 	updateChart: function (compteurId, consoPerHour, instant, trends, lastIndex, hphc) {
+
+		if (document.getElementById('linkyId')) {
+			//redefine id for all elements only for the first element
+			document.getElementById('linkyId').setAttribute('id', 'linkyId' + compteurId);
+			document.getElementById('hc-name').setAttribute('id', 'hc-name' + compteurId);
+			document.getElementById('hc-name').setAttribute('id', 'hp-name' + compteurId);
+			document.getElementById('HC').setAttribute('id', 'HC' + compteurId);
+			document.getElementById('HP').setAttribute('id', 'HP' + compteurId);
+			document.getElementById('instant').setAttribute('id', 'instant' + compteurId);
+			document.getElementById('trends').setAttribute('id', 'trends' + compteurId);
+			document.getElementById('chartConso').setAttribute('id', 'chartConso' + compteurId);
+		}
+		else if (document.getElementById('linkyId' + compteurId) === undefined) {
+			//create new UI
+			this.createUI(this.wrapper, compteurId);
+		}
+
 		if (hphc) {
-			document.getElementById('HC-name').className = "d2l-name bright";
-			document.getElementById('HP-name').className = "d2l-name";
-			document.getElementById('HP').innerHTML = lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh";
-			document.getElementById('HC').innerHTML = "<b>" + lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh" + "</b>";
-			document.getElementById('HP-name').innerHTML = "HP";
-			document.getElementById('HC-name').innerHTML = "<b>HC</b>";
+			document.getElementById('hc-name' + compteurId).className = "d2l-name bright";
+			document.getElementById('hp-name' + compteurId).className = "d2l-name";
+			document.getElementById('HP' + compteurId).innerHTML = lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh";
+			document.getElementById('HC' + compteurId).innerHTML = "<b>" + lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh" + "</b>";
+			document.getElementById('hp-name' + compteurId).innerHTML = "HP";
+			document.getElementById('hc-name' + compteurId).innerHTML = "<b>HC</b>";
 		}
 		else {
-			document.getElementById('HC-name').className = "d2l-name";
-			document.getElementById('HP-name').className = "d2l-name bright";
-			document.getElementById('HP').innerHTML = "<b>" + lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh" + "</b>";
-			document.getElementById('HC').innerHTML = lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh";
-			document.getElementById('HP-name').innerHTML = "<b>HP</b>";
-			document.getElementById('HC-name').innerHTML = "HC";
+			document.getElementById('hc-name' + compteurId).className = "d2l-name";
+			document.getElementById('hp-name' + compteurId).className = "d2l-name bright";
+			document.getElementById('HP' + compteurId).innerHTML = "<b>" + lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh" + "</b>";
+			document.getElementById('HC' + compteurId).innerHTML = lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh";
+			document.getElementById('hp-name' + compteurId).innerHTML = "<b>HP</b>";
+			document.getElementById('hc-name' + compteurId).innerHTML = "HC";
 		}
-		if(this.config.showCompteurId)
-		{
-			document.getElementById('linkyId').innerHTML = "Linky : " + compteurId;
+		if (this.config.showCompteurId) {
+			document.getElementById('linkyId' + compteurId).innerHTML = "Linky : " + compteurId;
 		}
-		document.getElementById('instant').innerHTML = parseFloat(instant).toString() + " W";
-		if(trends < 0)
-		{
-			document.getElementById('trends').innerHTML = svgGraphDown;
-			document.getElementById('trends').setAttribute('style', 'color: #198754');
+		document.getElementById('instant' + compteurId).innerHTML = parseFloat(instant).toString() + " W";
+		if (trends < 0) {
+			document.getElementById('trends' + compteurId).innerHTML = svgGraphDown;
+			document.getElementById('trends' + compteurId).setAttribute('style', 'color: #198754');
 		}
-		else
-		{
-			document.getElementById('trends').innerHTML = svgGraphUp;
-			document.getElementById('trends').setAttribute('style', 'color: #dc3545');
+		else {
+			document.getElementById('trends' + compteurId).innerHTML = svgGraphUp;
+			document.getElementById('trends' + compteurId).setAttribute('style', 'color: #dc3545');
 		}
 
 		if (this.config.showChart == true) {
-			if (this.chart == undefined) {
-				this.chart = this.createChart(consoPerHour);
+			if (document.getElementById('chartConso' + compteurId) == undefined) {
+				this.createChart(compteurId, consoPerHour);
 			}
 			else {
 				this.updateData(
-					this.chart,
+					document.getElementById('chartConso' + compteurId),
 					consoPerHour.map(({ hour }) => hour),
 					[
 						consoPerHour.map(({ consoHC }) => consoHC),
@@ -207,9 +223,9 @@ Module.register("MMM-D2L", {
 		chart.update();
 	},
 
-	createChart: function (consoPerHour) {
+	createChart: function (compteurId, consoPerHour) {
 		Chart.defaults.color = 'lightgrey';
-		return new Chart(document.getElementById('myChart'), {
+		new Chart(document.getElementById('chartConso' + compteurId), {
 			type: 'bar',
 			data: {
 				labels: consoPerHour.map(({ hour }) => hour),
@@ -227,7 +243,7 @@ Module.register("MMM-D2L", {
 				]
 			},
 			options: {
-				maintainAspectRatio:true,
+				maintainAspectRatio: true,
 				scales: {
 					x: {
 						ticks: {
