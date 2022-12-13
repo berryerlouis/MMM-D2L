@@ -64,8 +64,8 @@ function checkHPHC(configHeuresCreuses, horloge) {
 }
 
 function parseIndex(configHeuresCreuses, compteurId, response) {
-  let hc;
-  let hp;
+  let consoHC;
+  let consoHP;
   let last60Minutes;
   let instant = null;
   let trends = null;
@@ -73,29 +73,32 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
   for (let index = 0; index < response.length; index++) {
     const element = response[index];
     if (index == 0) {
-      hc = element.baseHchcEjphnBbrhcjb;
-      hp = element.hchpEjphpmBbrhpjb;
+      consoHC = element.baseHchcEjphnBbrhcjb;
+      consoHP = element.hchpEjphpmBbrhpjb;
       last60Minutes = new Date(new Date(element.horloge) - (60 * 60 * 1000)).toISOString();
     }
     else {
       //last relative hour index found
       if (new Date(element.horloge) < new Date(last60Minutes)) {
-        if (instant == null) {
-          instant = hc - element.baseHchcEjphnBbrhcjb + hp - element.hchpEjphpmBbrhpjb;
-        }
-        else{
-          //second relative hour, computed trends
-          trends = instant - (hc - element.baseHchcEjphnBbrhcjb + hp - element.hchpEjphpmBbrhpjb);
-        }
+
         //get consumed watt
-        hc -= element.baseHchcEjphnBbrhcjb;
-        hp -= element.hchpEjphpmBbrhpjb;
+        consoHC -= element.baseHchcEjphnBbrhcjb;
+        consoHP -= element.hchpEjphpmBbrhpjb;
+
+        //get last hour conso
+        if (instant == null) {
+          instant = consoHC + consoHP;
+        }
+        else {
+          //second relative hour, computed trends
+          trends = (consoHC + consoHP) - instant;
+        }
         //save
-        consoPerHour.push({ hour: new Date(element.horloge).getHours() + ":00", hc, hp });
+        consoPerHour.push({ hour: new Date(element.horloge).getHours() + ":00", consoHC, consoHP });
         //reset for next hour
         last60Minutes = new Date(new Date(element.horloge) - (60 * 60 * 1000)).toISOString();
-        hc = element.baseHchcEjphnBbrhcjb;
-        hp = element.hchpEjphpmBbrhpjb;
+        consoHC = element.baseHchcEjphnBbrhcjb;
+        consoHP = element.hchpEjphpmBbrhpjb;
       }
     }
   }
