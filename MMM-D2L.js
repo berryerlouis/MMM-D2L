@@ -151,8 +151,6 @@ Module.register("MMM-D2L", {
 	},
 
 	updateChart: function (compteurId, consoPerHour, instant, trends, lastIndex, hphc) {
-		
-		document.getElementById('linkyId').innerHTML = "Linky : " + compteurId;
 		if (hphc) {
 			document.getElementById('HC-name').className = "d2l-name bright";
 			document.getElementById('HP-name').className = "d2l-name";
