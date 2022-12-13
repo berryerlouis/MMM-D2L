@@ -68,6 +68,7 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
   let hp;
   let last60Minutes;
   let instant = null;
+  let trends = null;
   let consoPerHour = [];
   for (let index = 0; index < response.length; index++) {
     const element = response[index];
@@ -77,10 +78,14 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
       last60Minutes = new Date(new Date(element.horloge) - (60 * 60 * 1000)).toISOString();
     }
     else {
-      //last hour index found
+      //last relative hour index found
       if (new Date(element.horloge) < new Date(last60Minutes)) {
         if (instant == null) {
-          instant = hc - element.baseHchcEjphnBbrhcjb + hp - element.hchpEjphpmBbrhpjb
+          instant = hc - element.baseHchcEjphnBbrhcjb + hp - element.hchpEjphpmBbrhpjb;
+        }
+        else{
+          //second relative hour, computed trends
+          trends = instant - (hc - element.baseHchcEjphnBbrhcjb + hp - element.hchpEjphpmBbrhpjb);
         }
         //get consumed watt
         hc -= element.baseHchcEjphnBbrhcjb;
@@ -100,6 +105,7 @@ function parseIndex(configHeuresCreuses, compteurId, response) {
     compteurId,
     consoPerHour,
     instant,
+    trends,
     lastIndex: response[0],
     hphcMode: checkHPHC(configHeuresCreuses, response[0].horloge)
   }
