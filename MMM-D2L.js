@@ -97,7 +97,7 @@ Module.register("MMM-D2L", {
 		let last_24h_name = document.createElement("td");
 		let last_24h_price = document.createElement("td");
 		last_24h_name.className = "d2l-name";
-		last_24h_name.innerText = "Consomation dernière 24h"
+		last_24h_name.innerText = "Prix dernières 24h"
 		last_24h_price.className = "align-right bright";
 		last_24h_price.setAttribute('id', 'last-24h-price' + moduleId);
 		last_24h_price.innerText = "0 " + this.config.currency;
