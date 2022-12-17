@@ -81,7 +81,7 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
       firstConsoHC = consoHC;
       firstConsoHP = consoHP;
       last60Minutes = new Date(new Date(element.horloge) - (60 * 60 * 1000)).toISOString();
-      last24Hour = new Date(new Date(element.horloge) - (24 * 60 * 60 * 1000)).toISOString(); 
+      last24Hour = new Date(new Date(element.horloge) - (23 * 60 * 60 * 1000)).toISOString(); 
     }
     else {
       //last relative hour index found
