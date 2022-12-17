@@ -113,7 +113,7 @@ Module.register("MMM-D2L", {
 		let trends_index = document.createElement("div");
 		let trends_ico = document.createElement("div");
 		trends_name.className = "d2l-name";
-		trends_name.innerText = "Tendance de consomation"
+		trends_name.innerText = "Tendance de consomation (-1H)"
 		trends_index.className = "bright";
 		trends_index.setAttribute('id', 'trends-index' + moduleId);
 		trends_index.innerHTML = "0 W";
