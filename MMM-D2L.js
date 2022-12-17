@@ -100,7 +100,7 @@ Module.register("MMM-D2L", {
 		last_24h_name.innerText = "Consomation dernière 24h"
 		last_24h_price.className = "align-right bright";
 		last_24h_price.setAttribute('id', 'last-24h-price' + moduleId);
-		last_24h_price.innerText = "0 " + thisd.config.currency;
+		last_24h_price.innerText = "0 " + this.config.currency;
 		row.appendChild(last_24h_name);
 		row.appendChild(last_24h_price);
 		content.appendChild(row);
@@ -224,7 +224,7 @@ Module.register("MMM-D2L", {
 		
 		document.getElementById('last-24h-price' + moduleId).innerHTML = 
 			parseFloat(
-				(last24Hour.hc*this.config.price*hc)+(last24Hour.hp*this.config.price*hp)
+				(last24Hour.hc*this.config.price.hc)+(last24Hour.hp*this.config.price.hp)
 				).toString()
 			+ ' ' + this.config.currency;
 
