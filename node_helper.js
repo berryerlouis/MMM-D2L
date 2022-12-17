@@ -66,7 +66,10 @@ function checkHPHC(configHeuresCreuses, horloge) {
 function parseIndex(configHeuresCreuses, moduleId, response) {
   let consoHC;
   let consoHP;
+  let firstConsoHC;
+  let firstConsoHP;
   let last60Minutes;
+  let last24Hour;
   let instant = null;
   let trends = null;
   let consoPerHour = [];
@@ -75,7 +78,10 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
     if (index == 0) {
       consoHC = element.baseHchcEjphnBbrhcjb;
       consoHP = element.hchpEjphpmBbrhpjb;
+      firstConsoHC = consoHC;
+      firstConsoHP = consoHP;
       last60Minutes = new Date(new Date(element.horloge) - (60 * 60 * 1000)).toISOString();
+      last24Hour = new Date(new Date(element.horloge) - (24 * 60 * 60 * 1000)).toISOString(); 
     }
     else {
       //last relative hour index found
@@ -99,6 +105,12 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
         last60Minutes = new Date(new Date(element.horloge) - (60 * 60 * 1000)).toISOString();
         consoHC = element.baseHchcEjphnBbrhcjb;
         consoHP = element.hchpEjphpmBbrhpjb;
+      }
+      //last relative hour index found
+      if (new Date(element.horloge) < new Date(last24Hour)) {
+        firstConsoHC -= element.baseHchcEjphnBbrhcjb;
+        firstConsoHP -= element.hchpEjphpmBbrhpjb;
+        last24Hour = {hp:firstConsoHP, hc:firstConsoHC};
       }
     }
   }

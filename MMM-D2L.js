@@ -11,9 +11,15 @@ Module.register("MMM-D2L", {
 		password: "",
 		nbHoursToFetch: 24,
 		heuresCreuses: [
-			{ start: 0, end: 6 },
-			{ start: 11, end: 14 },
+			{ start: 1, end: 7 },
+			{ start: 11, end: 13 },
 		],
+		price: 
+		{ 
+			hc: 0.1470, 
+			hp: 0.1841 
+		},
+		currency: '€',
 		contract: 6000,
 		showCompteurId: false,
 		showChart: true,
@@ -85,6 +91,20 @@ Module.register("MMM-D2L", {
 		row.appendChild(instant_index);
 		content.appendChild(row);
 
+		
+		row = document.createElement("tr");
+		row.className = "d2l-tr";
+		let last_24h_name = document.createElement("td");
+		let last_24h_price = document.createElement("td");
+		last_24h_name.className = "d2l-name";
+		last_24h_name.innerText = "Consomation dernière 24h"
+		last_24h_price.className = "align-right bright";
+		last_24h_price.setAttribute('id', 'last-24h-price' + moduleId);
+		last_24h_price.innerText = "0 " + thisd.config.currency;
+		row.appendChild(last_24h_name);
+		row.appendChild(last_24h_price);
+		content.appendChild(row);
+
 		row = document.createElement("tr");
 		row.className = "d2l-tr";
 		let trends_name = document.createElement("td");
@@ -141,10 +161,11 @@ Module.register("MMM-D2L", {
 			let moduleId = payload.moduleId;
 			let consoPerHour = payload.consoPerHour;
 			let instant = payload.instant;
+			let last24Hour = payload.last24Hour;
 			let trends = payload.trends;
 			let lastIndex = payload.lastIndex;
 			let hphcMode = payload.hphcMode;
-			this.updateChart(moduleId, consoPerHour, instant, trends, lastIndex, hphcMode);
+			this.updateChart(moduleId, consoPerHour, instant, last24Hour, trends, lastIndex, hphcMode);
 			Log.info(`${this.name} : indexes received`);
 		}
 	},
@@ -161,7 +182,7 @@ Module.register("MMM-D2L", {
 		);
 	},
 
-	updateChart: function (moduleId, consoPerHour, instant, trends, lastIndex, hphc) {
+	updateChart: function (moduleId, consoPerHour, instant, last24Hour, trends, lastIndex, hphc) {
 
 		if (document.getElementById('linkyId')) {
 			//redefine id for all elements only for the first element
@@ -171,6 +192,7 @@ Module.register("MMM-D2L", {
 			document.getElementById('HC').setAttribute('id', 'HC' + moduleId);
 			document.getElementById('HP').setAttribute('id', 'HP' + moduleId);
 			document.getElementById('instant').setAttribute('id', 'instant' + moduleId);
+			document.getElementById('last-24h-price').setAttribute('id', 'last-24h-price' + moduleId);
 			document.getElementById('trends-ico').setAttribute('id', 'trends-ico' + moduleId);
 			document.getElementById('trends-index').setAttribute('id', 'trends-index' + moduleId);
 			document.getElementById('chartConso').setAttribute('id', 'chartConso' + moduleId);
@@ -199,6 +221,13 @@ Module.register("MMM-D2L", {
 			document.getElementById('hp-name' + moduleId).innerHTML = "<b>HP</b>";
 			document.getElementById('hc-name' + moduleId).innerHTML = "HC";
 		}
+		
+		document.getElementById('last-24h-price' + moduleId).innerHTML = 
+			parseFloat(
+				(last24Hour.hc*this.config.price*hc)+(last24Hour.hp*this.config.price*hp)
+				).toString()
+			+ ' ' + this.config.currency;
+
 		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
 		if (this.config.showCompteurId) {
 			document.getElementById('linkyId' + moduleId).innerHTML = "Linky : " + moduleId;

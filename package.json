@@ -9,6 +9,6 @@
   "author": "Louis BERRYER",
   "license": "MIT",
   "dependencies": {
-    "xhr2": "^0.2.1"
+    "xhr2": "0.2.*"
   }
 }

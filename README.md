@@ -51,6 +51,12 @@ modules: [
           end:14
         },
       ],
+		  price: 
+      { 
+        hc: 0.1470, 
+        hp: 0.1841 
+      },
+      currency: '€',
     }
   }
 ]
@@ -72,6 +78,8 @@ The following properties can be configured:
 |`nbHoursToFetch`|`24`|Number of hours to fetch data.|
 |`updateInterval`|`60 * 60 * 1000`|How often (in ms) to fetch data.|
 |`heuresCreuses`|`[{start:0,end:6},{start:11,end:14}]`|set the hours of each 'heures creuses' from start to end.|
+|`price`|`{ hc: 0.1470, hp: 0.1841 }`|set the price of each 'heures creuses' and 'heures pleines'.|
+|`currency`|`€`|set the currency'.|
 
 ## Notifications
 
