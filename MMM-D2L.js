@@ -224,7 +224,7 @@ Module.register("MMM-D2L", {
 		
 		document.getElementById('last-24h-price' + moduleId).innerHTML = 
 			parseFloat(
-				(last24Hour.hc*this.config.price.hc)+(last24Hour.hp*this.config.price.hp)
+				((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)
 				).toString()
 			+ ' ' + this.config.currency;
 
