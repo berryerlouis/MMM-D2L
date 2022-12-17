@@ -120,6 +120,7 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
     moduleId,
     consoPerHour,
     instant,
+    last24Hour,
     trends,
     lastIndex: response[0],
     hphcMode: checkHPHC(configHeuresCreuses, response[0].horloge)
