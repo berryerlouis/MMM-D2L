@@ -195,11 +195,11 @@ Module.register("MMM-D2L", {
 			document.getElementById('linkyId' + moduleId).innerHTML = "Linky : " + moduleId;
 		}
 		if (trends < 0) {
-			document.getElementById('trends' + moduleId).innerHTML = trends + 'W ' + svgGraphDown;
+			document.getElementById('trends' + moduleId).innerHTML = '<div class="bright">' + trends + 'W </div>' + svgGraphDown;
 			document.getElementById('trends' + moduleId).setAttribute('style', 'color: #198754');
 		}
 		else {
-			document.getElementById('trends' + moduleId).innerHTML = '+' + trends + 'W ' + svgGraphUp;
+			document.getElementById('trends' + moduleId).innerHTML = '<div class="bright">+' + trends + 'W </div>' + svgGraphUp;
 			document.getElementById('trends' + moduleId).setAttribute('style', 'color: #dc3545');
 		}
 
