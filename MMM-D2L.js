@@ -227,7 +227,7 @@ Module.register("MMM-D2L", {
 				parseFloat(
 					((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)
 					)
-			) + ' ' + this.config.currency;
+			)  + ' ' + this.config.currency;
 
 		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
 		if (this.config.showCompteurId) {
