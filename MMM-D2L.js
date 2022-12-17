@@ -171,7 +171,8 @@ Module.register("MMM-D2L", {
 			document.getElementById('HC').setAttribute('id', 'HC' + moduleId);
 			document.getElementById('HP').setAttribute('id', 'HP' + moduleId);
 			document.getElementById('instant').setAttribute('id', 'instant' + moduleId);
-			document.getElementById('trends').setAttribute('id', 'trends' + moduleId);
+			document.getElementById('trends-ico').setAttribute('id', 'trends-ico' + moduleId);
+			document.getElementById('trends-index').setAttribute('id', 'trends-index' + moduleId);
 			document.getElementById('chartConso').setAttribute('id', 'chartConso' + moduleId);
 			if (this.config.showChart == true) {
 				this.createChart(moduleId, consoPerHour);
