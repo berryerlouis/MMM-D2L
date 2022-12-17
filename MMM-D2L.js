@@ -109,8 +109,7 @@ Module.register("MMM-D2L", {
 		row.className = "d2l-tr";
 		let trends_name = document.createElement("td");
 		let trends_cell = document.createElement("td");
-		trends_cell.className = "align-right";
-		trends_cell.setAttribute('styles', 'display:flex; flex-direction:row;');
+		trends_cell.setAttribute('style', 'display:flex; flex-direction:row; justify-content: flex-end;');
 		let trends_index = document.createElement("div");
 		let trends_ico = document.createElement("div");
 		trends_name.className = "d2l-name";
@@ -118,6 +117,7 @@ Module.register("MMM-D2L", {
 		trends_index.className = "bright";
 		trends_index.setAttribute('id', 'trends-index' + moduleId);
 		trends_index.innerHTML = "0 W";
+		trends_index.setAttribute('style', 'margin-right:10px');
 		trends_ico.setAttribute('id', 'trends-ico' + moduleId);
 		trends_ico.innerHTML = svgGraphDown;
 		trends_cell.appendChild(trends_index);
