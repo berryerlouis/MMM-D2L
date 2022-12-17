@@ -20,7 +20,7 @@ function apiPost(url, login, password, callback) {
       }
     }
     else if (this.status != 0) {
-      Log.error(this.name + " : POST receive status " + this.status);
+      Log.log(this.name + " : POST receive status " + this.status);
     }
   });
 
@@ -41,7 +41,7 @@ function apiGet(url, apiKey, callback) {
       }
     }
     else if (this.status != 0) {
-      Log.error(this.name + " : GET receive status " + this.status);
+      Log.log(this.name + " : GET receive status " + this.status);
     }
   });
 
