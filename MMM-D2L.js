@@ -222,12 +222,8 @@ Module.register("MMM-D2L", {
 			document.getElementById('hc-name' + moduleId).innerHTML = "HC";
 		}
 		
-		document.getElementById('last-24h-price' + moduleId).innerHTML = String.Format(
-			"{0:0000}", 
-				parseFloat(
-					((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)
-					)
-			)  + ' ' + this.config.currency;
+		document.getElementById('last-24h-price' + moduleId).innerHTML = 
+				parseFloat(((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)).toFixed(4) + ' ' + this.config.currency;
 
 		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
 		if (this.config.showCompteurId) {
