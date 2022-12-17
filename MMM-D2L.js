@@ -88,14 +88,22 @@ Module.register("MMM-D2L", {
 		row = document.createElement("tr");
 		row.className = "d2l-tr";
 		let trends_name = document.createElement("td");
-		let trends_index = document.createElement("td");
+		let trends_cell = document.createElement("td");
+		trends_cell.className = "align-right";
+		let trends_index = document.createElement("div");
+		let trends_ico = document.createElement("div");
 		trends_name.className = "d2l-name";
 		trends_name.innerText = "Tendance de consomation"
-		trends_index.className = "align-right bright";
-		trends_index.setAttribute('id', 'trends' + moduleId);
-		trends_index.innerHTML = svgGraphDown;
+		trends_index.className = "bright";
+		trends_index.setAttribute('id', 'trends-index' + moduleId);
+		trends_index.innerHTML = "0 W";
+		trends_ico.className = "align-right";
+		trends_ico.setAttribute('id', 'trends-ico' + moduleId);
+		trends_ico.innerHTML = svgGraphDown;
+		trends_cell.appendChild(trends_index);
+		trends_cell.appendChild(trends_ico);
 		row.appendChild(trends_name);
-		row.appendChild(trends_index);
+		row.appendChild(trends_cell);
 		content.appendChild(row);
 
 		table.appendChild(content);
@@ -195,12 +203,14 @@ Module.register("MMM-D2L", {
 			document.getElementById('linkyId' + moduleId).innerHTML = "Linky : " + moduleId;
 		}
 		if (trends < 0) {
-			document.getElementById('trends' + moduleId).innerHTML = '<div class="bright">' + trends + 'W '+ svgGraphDown +'</div>';
-			document.getElementById('trends' + moduleId).setAttribute('style', 'color: #198754');
+			document.getElementById('trends-ico' + moduleId).innerHTML = svgGraphDown;
+			document.getElementById('trends-ico' + moduleId).setAttribute('style', 'color: #198754');
+			document.getElementById('trends-index' + moduleId).innerHTML = trends + ' W ';
 		}
 		else {
-			document.getElementById('trends' + moduleId).innerHTML = '<div class="bright">+' + trends + 'W '+ svgGraphDown +'</div>';
-			document.getElementById('trends' + moduleId).setAttribute('style', 'color: #dc3545');
+			document.getElementById('trends-ico' + moduleId).innerHTML = svgGraphUp;
+			document.getElementById('trends-ico' + moduleId).setAttribute('style', 'color: #dc3545');
+			document.getElementById('trends-index' + moduleId).innerHTML = '+' + trends + ' W ';
 		}
 
 		if (this.config.showChart == true) {
