@@ -110,6 +110,7 @@ Module.register("MMM-D2L", {
 		let trends_name = document.createElement("td");
 		let trends_cell = document.createElement("td");
 		trends_cell.className = "align-right";
+		trends_cell.setAttribute('styles', 'display:flex; flex-direction:row;');
 		let trends_index = document.createElement("div");
 		let trends_ico = document.createElement("div");
 		trends_name.className = "d2l-name";
@@ -117,7 +118,6 @@ Module.register("MMM-D2L", {
 		trends_index.className = "bright";
 		trends_index.setAttribute('id', 'trends-index' + moduleId);
 		trends_index.innerHTML = "0 W";
-		trends_ico.className = "align-right";
 		trends_ico.setAttribute('id', 'trends-ico' + moduleId);
 		trends_ico.innerHTML = svgGraphDown;
 		trends_cell.appendChild(trends_index);
@@ -222,11 +222,12 @@ Module.register("MMM-D2L", {
 			document.getElementById('hc-name' + moduleId).innerHTML = "HC";
 		}
 		
-		document.getElementById('last-24h-price' + moduleId).innerHTML = 
-			parseFloat(
-				((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)
-				).toString()
-			+ ' ' + this.config.currency;
+		document.getElementById('last-24h-price' + moduleId).innerHTML = String.Format(
+			"{0:0000}", 
+				parseFloat(
+					((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)
+					)
+			) + ' ' + this.config.currency;
 
 		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
 		if (this.config.showCompteurId) {
