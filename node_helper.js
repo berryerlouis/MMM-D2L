@@ -62,67 +62,119 @@ function checkHPHC(configHeuresCreuses, horloge) {
 	return heureCreuse;
 }
 
-function parseIndex(configHeuresCreuses, moduleId, response) {
-	let consoHC;
-	let consoHP;
+function parseIndex(priceHPHC, configHeuresCreuses, moduleId, response) {
 	let consoPerHour = [];
-	let conso = [];
-	let price = [];
+	let conso = {instant:0,j1:0,j2:0,j3:0};
+	let price = {instant:0,j1:0,j2:0,j3:0};
 
-	let startOfCurrentDay;
-	let startOfJ1;
-	let startOfJ2;
-	let startOfJ3;
+
+	let currentDate;
+	let to;
+	let from;
+
+	currentDate = new Date(
+		new Date().getFullYear(),
+		new Date().getMonth(),
+		new Date().getDate()
+	).toISOString();
+
+	
+	let currentTimeDay = new Date(
+		new Date(response[0].horloge).getFullYear(),
+		new Date(response[0].horloge).getMonth(),
+		new Date(response[0].horloge).getDate(),
+		new Date(response[0].horloge).getHours(),
+	).toISOString();
+
+	to = new Date(
+		new Date(currentDate) 
+		- 24 * 60 * 60 * 1000 
+	).toISOString();
+	
+	from = new Date(
+		new Date(currentDate) 
+		- 2 * 24 * 60 * 60 * 1000 
+	).toISOString();
+
+	let last60Minutes = new Date(new Date(response[0].horloge) - (60 * 60 * 1000)).toISOString();
+	let tempConso = {hp:0,hc:0};
+
 	for (let index = 0; index < response.length; index++) {
 		const element = response[index];
 
+		if(index === 0)
+		{
+			tempConso.hc = element.baseHchcEjphnBbrhcjb;
+			tempConso.hp = element.hchpEjphpmBbrhpjb;
+		}
+		//get instant conso
+		if (new Date(element.horloge) <= new Date(last60Minutes))
+		{
+			if(conso.instant == 0)
+			{
+				conso.instant = response[0].baseHchcEjphnBbrhcjb - element.baseHchcEjphnBbrhcjb + response[0].hchpEjphpmBbrhpjb - element.hchpEjphpmBbrhpjb;
+				price.instant = priceHPHC.hc * (response[0].baseHchcEjphnBbrhcjb - element.baseHchcEjphnBbrhcjb)/1000 + priceHPHC.hp * (response[0].hchpEjphpmBbrhpjb - element.hchpEjphpmBbrhpjb)/1000;	
+			}
+		}
 
-		if (index == 0) {
-			consoHC = element.baseHchcEjphnBbrhcjb;
-			consoHP = element.hchpEjphpmBbrhpjb;
-			startOfCurrentDay = new Date(
-				new Date(element.horloge) - new Date().getHours() * 60 * 60 * 1000
+		//get day current day conso
+		if (new Date(element.horloge) <= new Date(currentTimeDay)
+		 && (new Date(element.horloge).getDate() == new Date(currentDate).getDate() ) ) {			
+			//save
+			consoPerHour.push({
+				hour: new Date(currentTimeDay).getHours() + ":00",
+				consoHC : tempConso.hc - element.baseHchcEjphnBbrhcjb,
+				consoHP : tempConso.hp - element.hchpEjphpmBbrhpjb,
+			});
+			//reset for next hour
+			tempConso.hc = element.baseHchcEjphnBbrhcjb;
+			tempConso.hp = element.hchpEjphpmBbrhpjb;
+			//minus one hour
+			currentTimeDay = new Date(new Date(currentTimeDay) - 60 * 60 * 1000).toISOString();
+		}
+
+		//get j - x conso
+		else if ((new Date(element.horloge) < new Date(to)) 
+			&& (new Date(element.horloge) >= new Date(from))) {
+
+			if(conso.j1 == 0)
+			{
+				conso.j1 = tempConso.hc - element.baseHchcEjphnBbrhcjb + tempConso.hp - element.hchpEjphpmBbrhpjb;
+				price.j1 = priceHPHC.hc * (tempConso.hc - element.baseHchcEjphnBbrhcjb) / 1000 + priceHPHC.hp * (tempConso.hp - element.hchpEjphpmBbrhpjb) / 1000;
+			}
+			else if(conso.j2 == 0)
+			{
+				conso.j2 = tempConso.hc - element.baseHchcEjphnBbrhcjb + tempConso.hp - element.hchpEjphpmBbrhpjb;
+				price.j2 = priceHPHC.hc * (tempConso.hc - element.baseHchcEjphnBbrhcjb) / 1000 + priceHPHC.hp * (tempConso.hp - element.hchpEjphpmBbrhpjb) / 1000;
+			}
+			else if(conso.j3 == 0)
+			{
+				conso.j3 = tempConso.hc - element.baseHchcEjphnBbrhcjb + tempConso.hp - element.hchpEjphpmBbrhpjb;
+				price.j3 = priceHPHC.hc * (tempConso.hc - element.baseHchcEjphnBbrhcjb) / 1000 + priceHPHC.hp * (tempConso.hp - element.hchpEjphpmBbrhpjb) / 1000;
+			}
+
+			tempConso.hc = element.baseHchcEjphnBbrhcjb;
+			tempConso.hp = element.hchpEjphpmBbrhpjb;
+			to = from
+			from = new Date(
+				new Date(to) 
+				- 24 * 60 * 60 * 1000 
 			).toISOString();
-			
-			Log.log(" : startOfCurrentDay " + startOfCurrentDay);
-		} 
-		
-		/*else {
-			//last relative hour index found
-			if (new Date(element.horloge) < new Date(last60Minutes)) {
-				//get consumed watt
-				consoHC -= element.baseHchcEjphnBbrhcjb;
-				consoHP -= element.hchpEjphpmBbrhpjb;
-
-				//get last hour conso
-				if (instant == null) {
-					instant = consoHC + consoHP;
-				} else {
-					//second relative hour, computed trends
-					trends = instant - (consoHC + consoHP);
-				}
-				//save
-				consoPerHour.push({
-					hour: new Date(element.horloge).getHours() + ":00",
-					consoHC,
-					consoHP,
-				});
-				//reset for next hour
-				last60Minutes = new Date(
-					new Date(element.horloge) - 60 * 60 * 1000
-				).toISOString();
-				consoHC = element.baseHchcEjphnBbrhcjb;
-				consoHP = element.hchpEjphpmBbrhpjb;
-			}
-			//last relative hour index found
-			if (new Date(element.horloge) < new Date(last24Hour)) {
-				firstConsoHC -= element.baseHchcEjphnBbrhcjb;
-				firstConsoHP -= element.hchpEjphpmBbrhpjb;
-				last24Hour = { hp: firstConsoHP, hc: firstConsoHC };
-			}
-		}*/
+		}
 	}
+
 	consoPerHour = consoPerHour.reverse();
+	//fill 24 h
+	for (let index = 0; index < 24; index++) {
+		if(consoPerHour[index] === undefined)
+		{
+			consoPerHour.splice(index,0,{
+				hour: index + ":00",
+				consoHC : 0,
+				consoHP : 0,
+			});
+		}
+	}
 
 	return {
 		moduleId,
@@ -135,7 +187,6 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
 }
 
 module.exports = NodeHelper.create({
-	configHeuresCreuses: [],
 
 	start: function () {
 		Log.log("Starting node helper for: " + this.name);
@@ -198,7 +249,6 @@ module.exports = NodeHelper.create({
 				}
 			);
 		} else if (notification === D2LApi.GET_DATA_REQ) {
-			this.configHeuresCreuses = payload.configHeuresCreuses;
 			apiPost(
 				D2LApi.APIKEY_URL,
 				payload.login,
@@ -217,7 +267,8 @@ module.exports = NodeHelper.create({
 									this.sendSocketNotification(
 										D2LApi.GET_DATA_RES,
 										parseIndex(
-											this.configHeuresCreuses,
+											payload.price,
+											payload.configHeuresCreuses,
 											compteur.idModule,
 											response
 										)

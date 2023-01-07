@@ -43,75 +43,47 @@ Module.register("MMM-D2L", {
 	},
 
 	createUI: function (divWrapper, moduleId) {
-		divWrapper =
+		divWrapper.innerHTML +=
 			`
 		<div id="linkyId" class="title">Linky</div>
 		<table class="d2l-table">
 		  <tbody>
 			<tr>
 			  <td class="d2l-name" id="hc-name">HC</td>
-			  <td class="d2l-value" id="HC` +
-			moduleId +
-			`" colspan="2"></td>
+			  <td class="d2l-value" id="HC` + moduleId + `" colspan="2"></td>
 			</tr>
 			<tr>
 			  <td class="d2l-name" id="hp-name"><b>HP</b></td>
-			  <td class="d2l-value" id="HP` +
-			moduleId +
-			`" colspan="2"></td>
+			  <td class="d2l-value" id="HP` + moduleId + `" colspan="2"></td>
 			</tr>
 			<tr>
 			  <td class="d2l-name">Conso instantannée</td>
-			  <td class="d2l-value" id="conso-instant` +
-			moduleId +
-			`">W</td>
-			  <td class="d2l-value" id="price-instant` +
-			moduleId +
-			`">` +
-			this.config.currency +
-			`</td>
+			  <td class="d2l-value" id="conso-instant` + moduleId + `">0 W</td>
+			  <td class="d2l-value" id="price-instant` + moduleId + `">0 ` + this.config.currency + `</td>
 			</tr>
 			<tr>
 			  <td class="d2l-name">Conso Jour-1</td>
-			  <td class="d2l-value" id="conso-j-1` +
-			moduleId +
-			`">W</td>
-			  <td class="d2l-value" id="price-j-1` +
-			moduleId +
-			`">` +
-			this.config.currency +
-			`</td>
+			  <td class="d2l-value" id="conso-j-1` + moduleId + `">0 W</td>
+			  <td class="d2l-value" id="price-j-1` + moduleId + `">0 ` + this.config.currency + `</td>
 			</tr>
 			<tr>
 			  <td class="d2l-name">Conso Jour-2</td>
-			  <td class="d2l-value" id="conso-j-2` +
-			moduleId +
-			`">W</td>
-			  <td class="d2l-value" id="price-j-2` +
-			moduleId +
-			`">` +
-			this.config.currency +
-			`</td>
+			  <td class="d2l-value" id="conso-j-2` + moduleId + `">0 W</td>
+			  <td class="d2l-value" id="price-j-2` + moduleId + `">0 ` + this.config.currency + `</td>
 			</tr>
 			<tr>
 			  <td class="d2l-name">Conso Jour-3</td>
-			  <td class="d2l-value" id="conso-j-3` +
-			moduleId +
-			`">W</td>
-			  <td class="d2l-value" id="price-j-3` +
-			moduleId +
-			`">` +
-			this.config.currency +
-			`</td>
+			  <td class="d2l-value" id="conso-j-3` + moduleId + `">0 W</td>
+			  <td class="d2l-value" id="price-j-3` + moduleId + `">0 ` + this.config.currency + `</td>
 			</tr>
 		  </tbody>
 		</table>`;
 
 		if (this.config.showChart == true) {
-			divWrapper +=
-				`<canvas class="d2l-chart" id="chartConso` +
-				moduleId +
-				`"></canvas>`;
+			divWrapper.innerHTML += `
+			<div class="d2l-chart">
+				<canvas id="chartConso` + moduleId + `"></canvas>
+			</div>`;
 		}
 	},
 
@@ -137,7 +109,7 @@ Module.register("MMM-D2L", {
 			let price = payload.price;
 			let lastIndex = payload.lastIndex;
 			let hphcMode = payload.hphcMode;
-			this.updateChart(
+			this.updateUI(
 				moduleId,
 				consoPerHour,
 				conso,
@@ -154,11 +126,12 @@ Module.register("MMM-D2L", {
 			login: this.config.login,
 			password: this.config.password,
 			configHeuresCreuses: this.config.heuresCreuses,
-			nbHoursToFetch: 24 * 3,
+			nbHoursToFetch: 24 * 6,
+			price:this.config.price
 		});
 	},
 
-	updateChart: function (
+	updateUI: function (
 		moduleId,
 		consoPerHour,
 		conso,
@@ -179,31 +152,16 @@ Module.register("MMM-D2L", {
 				.setAttribute("id", "hp-name" + moduleId);
 			document.getElementById("HC").setAttribute("id", "HC" + moduleId);
 			document.getElementById("HP").setAttribute("id", "HP" + moduleId);
-			document
-				.getElementById("conso-instant")
-				.setAttribute("id", "conso-instant" + moduleId);
-			document
-				.getElementById("price-instant")
-				.setAttribute("id", "price-instant" + moduleId);
-			document
-				.getElementById("conso-j-1")
-				.setAttribute("id", "conso-j-1" + moduleId);
-			document
-				.getElementById("price-j-1")
-				.setAttribute("id", "price-j-1" + moduleId);
-			document
-				.getElementById("conso-j-2")
-				.setAttribute("id", "conso-j-2" + moduleId);
-			document
-				.getElementById("price-j-2")
-				.setAttribute("id", "price-j-2" + moduleId);
-			document
-				.getElementById("conso-j-3")
-				.setAttribute("id", "conso-j-3" + moduleId);
-			document
-				.getElementById("price-j-3")
-				.setAttribute("id", "price-j-3" + moduleId);
+			document.getElementById("conso-instant").setAttribute("id", "conso-instant" + moduleId);
+			document.getElementById("price-instant").setAttribute("id", "price-instant" + moduleId);
+			document.getElementById("conso-j-1").setAttribute("id", "conso-j-1" + moduleId);
+			document.getElementById("price-j-1").setAttribute("id", "price-j-1" + moduleId);
+			document.getElementById("conso-j-2").setAttribute("id", "conso-j-2" + moduleId);
+			document.getElementById("price-j-2").setAttribute("id", "price-j-2" + moduleId);
+			document.getElementById("conso-j-3").setAttribute("id", "conso-j-3" + moduleId);
+			document.getElementById("price-j-3").setAttribute("id", "price-j-3" + moduleId);
 			if (this.config.showChart == true) {
+				document.getElementById("chartConso").setAttribute("id", "chartConso" + moduleId);
 				this.createChart(moduleId, consoPerHour);
 			}
 		} else if (
@@ -224,15 +182,14 @@ Module.register("MMM-D2L", {
 			document.getElementById("hp-name" + moduleId).innerHTML = "<b>HP</b>";
 			document.getElementById("hc-name" + moduleId).innerHTML = "HC";
 		}
-
 		document.getElementById("conso-instant" + moduleId).innerHTML = parseFloat(conso.instant).toString() + " W" ;
-		document.getElementById("price-instant" + moduleId).innerHTML = parseFloat(price.instant).toString() + " " + this.config.currency;
+		document.getElementById("price-instant" + moduleId).innerHTML = parseFloat(price.instant).toFixed(4) + " " + this.config.currency;
 		document.getElementById("conso-j-1" + moduleId).innerHTML = parseFloat(conso.j1).toString() + " W" ;
-		document.getElementById("price-j-1" + moduleId).innerHTML = parseFloat(price.j1).toString() + " " + this.config.currency;
+		document.getElementById("price-j-1" + moduleId).innerHTML = parseFloat(price.j1).toFixed(4) + " " + this.config.currency;
 		document.getElementById("conso-j-2" + moduleId).innerHTML = parseFloat(conso.j2).toString() + " W" ;
-		document.getElementById("price-j-2" + moduleId).innerHTML = parseFloat(price.j2).toString() + " " + this.config.currency;
+		document.getElementById("price-j-2" + moduleId).innerHTML = parseFloat(price.j2).toFixed(4) + " " + this.config.currency;
 		document.getElementById("conso-j-3" + moduleId).innerHTML = parseFloat(conso.j3).toString() + " W" ;
-		document.getElementById("price-j-3" + moduleId).innerHTML = parseFloat(price.j3).toString() + " " + this.config.currency;
+		document.getElementById("price-j-3" + moduleId).innerHTML = parseFloat(price.j3).toFixed(4) + " " + this.config.currency;
 
 		if (this.config.showCompteurId) {
 			document.getElementById("linkyId" + moduleId).innerHTML =
@@ -240,7 +197,7 @@ Module.register("MMM-D2L", {
 		}
 
 		if (this.config.showChart == true) {
-			this.updateData(
+			this.updateChart(
 				moduleId,
 				consoPerHour.map(({ hour }) => hour),
 				[
@@ -251,7 +208,7 @@ Module.register("MMM-D2L", {
 		}
 	},
 
-	updateData: function (chartId, label, data) {
+	updateChart: function (chartId, label, data) {
 		this.charts.forEach((chart) => {
 			if (chart.moduleId == chartId) {
 				chart.chart.data.labels = label;
@@ -284,7 +241,8 @@ Module.register("MMM-D2L", {
 					],
 				},
 				options: {
-					maintainAspectRatio: true,
+					responsive: true,
+					maintainAspectRatio: false,
 					scales: {
 						x: {
 							ticks: {

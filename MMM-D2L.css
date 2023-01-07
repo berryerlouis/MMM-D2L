@@ -1,6 +1,7 @@
 .MMM-D2L {
 	color: var(--color-text-bright);
 	font-family: Roboto, sans-serif;
+	font-size: .75rem;
 }
 
 .d2l-table .d2l-name {
@@ -16,6 +17,6 @@
 	margin-left: auto;
 	display: block;
 	box-sizing: border-box;
-	height: 100px;
-	width: 200px;
+	height: 200px;
+	width: 350px;
 }
