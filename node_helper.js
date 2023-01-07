@@ -69,20 +69,25 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
 	let conso = [];
 	let price = [];
 
+	let startOfCurrentDay;
+	let startOfJ1;
+	let startOfJ2;
+	let startOfJ3;
 	for (let index = 0; index < response.length; index++) {
 		const element = response[index];
+
+
 		if (index == 0) {
 			consoHC = element.baseHchcEjphnBbrhcjb;
 			consoHP = element.hchpEjphpmBbrhpjb;
-			firstConsoHC = consoHC;
-			firstConsoHP = consoHP;
-			last60Minutes = new Date(
-				new Date(element.horloge) - 60 * 60 * 1000
+			startOfCurrentDay = new Date(
+				new Date(element.horloge) - new Date().getHours() * 60 * 60 * 1000
 			).toISOString();
-			last24Hour = new Date(
-				new Date(element.horloge) - 24 * 60 * 60 * 1000
-			).toISOString();
-		} else {
+			
+			Log.log(this.name + " : startOfCurrentDay " + startOfCurrentDay);
+		} 
+		
+		/*else {
 			//last relative hour index found
 			if (new Date(element.horloge) < new Date(last60Minutes)) {
 				//get consumed watt
@@ -115,7 +120,7 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
 				firstConsoHP -= element.hchpEjphpmBbrhpjb;
 				last24Hour = { hp: firstConsoHP, hc: firstConsoHC };
 			}
-		}
+		}*/
 	}
 	consoPerHour = consoPerHour.reverse();
 
