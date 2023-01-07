@@ -1,7 +1,9 @@
 // MMM-D2L.js
 
-const svgGraphDown = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-down-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z" /></svg>'
-const svgGraphUp = '<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/></svg>'
+const svgGraphDown =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-down-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z" /></svg>';
+const svgGraphUp =
+	'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/></svg>';
 
 Module.register("MMM-D2L", {
 	// Default module config
@@ -9,17 +11,15 @@ Module.register("MMM-D2L", {
 		updateInterval: 60000,
 		login: "",
 		password: "",
-		nbHoursToFetch: 24,
 		heuresCreuses: [
 			{ start: 1, end: 7 },
 			{ start: 11, end: 13 },
 		],
-		price: 
-		{ 
-			hc: 0.1470, 
-			hp: 0.1841 
+		price: {
+			hc: 0.147,
+			hp: 0.1841,
 		},
-		currency: '€',
+		currency: "€",
 		contract: 6000,
 		showCompteurId: false,
 		showChart: true,
@@ -36,114 +36,87 @@ Module.register("MMM-D2L", {
 		this.createUI(this.wrapper, "");
 		Log.info(`Starting module: ${this.name}`);
 		this.fetchData();
-		this.updateTimer = setInterval(() => this.fetchData(), this.config.updateInterval);
+		this.updateTimer = setInterval(
+			() => this.fetchData(),
+			this.config.updateInterval
+		);
 	},
 
 	createUI: function (divWrapper, moduleId) {
-		let title = document.createElement("div");
-		title.setAttribute('id', 'linkyId' + moduleId);
-		title.className = "title bright";
-		title.innerText = "Linky"
-		divWrapper.appendChild(title);
-
-		table = document.createElement("table");
-		table.className = "d2l-table";
-		let content = document.createElement("tbody");
-
-		let row = document.createElement("tr");
-		row.className = "d2l-tr";
-		let hc_name = document.createElement("td");
-		let hc_index = document.createElement("td");
-		hc_name.className = "d2l-name";
-		hc_name.innerText = "HC"
-		hc_name.setAttribute('id', 'hc-name' + moduleId);
-		hc_index.className = "align-right bright";
-		hc_index.setAttribute('id', 'HC' + moduleId);
-		hc_index.innerText = "0"
-		row.appendChild(hc_name);
-		row.appendChild(hc_index);
-		content.appendChild(row);
-
-		row = document.createElement("tr");
-		row.className = "d2l-tr";
-		let hp_name = document.createElement("td");
-		let hp_index = document.createElement("td");
-		hp_name.className = "d2l-name";
-		hp_name.innerText = "HP"
-		hp_name.setAttribute('id', 'hp-name' + moduleId);
-		hp_index.className = "align-right bright";
-		hp_index.setAttribute('id', 'HP' + moduleId);
-		hp_index.innerText = "0"
-		row.appendChild(hp_name);
-		row.appendChild(hp_index);
-		content.appendChild(row);
-
-		row = document.createElement("tr");
-		row.className = "d2l-tr";
-		let instant_name = document.createElement("td");
-		let instant_index = document.createElement("td");
-		instant_name.className = "d2l-name";
-		instant_name.innerText = "Consomation dernière heure"
-		instant_index.className = "align-right bright";
-		instant_index.setAttribute('id', 'instant' + moduleId);
-		instant_index.innerText = "0"
-		row.appendChild(instant_name);
-		row.appendChild(instant_index);
-		content.appendChild(row);
-
-		
-		row = document.createElement("tr");
-		row.className = "d2l-tr";
-		let last_24h_name = document.createElement("td");
-		let last_24h_price = document.createElement("td");
-		last_24h_name.className = "d2l-name";
-		last_24h_name.innerText = "Prix dernières 24h"
-		last_24h_price.className = "align-right bright";
-		last_24h_price.setAttribute('id', 'last-24h-price' + moduleId);
-		last_24h_price.innerText = "0 " + this.config.currency;
-		row.appendChild(last_24h_name);
-		row.appendChild(last_24h_price);
-		content.appendChild(row);
-
-		row = document.createElement("tr");
-		row.className = "d2l-tr";
-		let trends_name = document.createElement("td");
-		let trends_cell = document.createElement("td");
-		trends_cell.setAttribute('style', 'display:flex; flex-direction:row; justify-content: flex-end;');
-		let trends_index = document.createElement("div");
-		let trends_ico = document.createElement("div");
-		trends_name.className = "d2l-name";
-		trends_name.innerText = "Tendance de consomation (-1H)"
-		trends_index.className = "bright";
-		trends_index.setAttribute('id', 'trends-index' + moduleId);
-		trends_index.innerHTML = "0 W";
-		trends_index.setAttribute('style', 'margin-right:10px');
-		trends_ico.setAttribute('id', 'trends-ico' + moduleId);
-		trends_ico.innerHTML = svgGraphDown;
-		trends_cell.appendChild(trends_index);
-		trends_cell.appendChild(trends_ico);
-		row.appendChild(trends_name);
-		row.appendChild(trends_cell);
-		content.appendChild(row);
-
-		table.appendChild(content);
-		divWrapper.appendChild(table);
+		divWrapper =
+			`
+		<div id="linkyId" class="title">Linky</div>
+		<table class="d2l-table">
+		  <tbody>
+			<tr>
+			  <td class="d2l-name" id="hc-name">HC</td>
+			  <td class="d2l-value" id="HC` +
+			moduleId +
+			`" colspan="2"></td>
+			</tr>
+			<tr>
+			  <td class="d2l-name" id="hp-name"><b>HP</b></td>
+			  <td class="d2l-value" id="HP` +
+			moduleId +
+			`" colspan="2"></td>
+			</tr>
+			<tr>
+			  <td class="d2l-name">Conso instantannée</td>
+			  <td class="d2l-value" id="conso-instant` +
+			moduleId +
+			`">W</td>
+			  <td class="d2l-value" id="price-instant` +
+			moduleId +
+			`">` +
+			this.config.currency +
+			`</td>
+			</tr>
+			<tr>
+			  <td class="d2l-name">Conso Jour-1</td>
+			  <td class="d2l-value" id="conso-j-1` +
+			moduleId +
+			`">W</td>
+			  <td class="d2l-value" id="price-j-1` +
+			moduleId +
+			`">` +
+			this.config.currency +
+			`</td>
+			</tr>
+			<tr>
+			  <td class="d2l-name">Conso Jour-2</td>
+			  <td class="d2l-value" id="conso-j-2` +
+			moduleId +
+			`">W</td>
+			  <td class="d2l-value" id="price-j-2` +
+			moduleId +
+			`">` +
+			this.config.currency +
+			`</td>
+			</tr>
+			<tr>
+			  <td class="d2l-name">Conso Jour-3</td>
+			  <td class="d2l-value" id="conso-j-3` +
+			moduleId +
+			`">W</td>
+			  <td class="d2l-value" id="price-j-3` +
+			moduleId +
+			`">` +
+			this.config.currency +
+			`</td>
+			</tr>
+		  </tbody>
+		</table>`;
 
 		if (this.config.showChart == true) {
-			let div = document.createElement("div");
-			let chartConso = document.createElement("canvas");
-			chartConso.setAttribute('style', 'margin-left: auto;');
-			chartConso.setAttribute('id', 'chartConso' + moduleId);
-			div.appendChild(chartConso);
-			divWrapper.appendChild(div);
+			divWrapper +=
+				`<canvas class="d2l-chart" id="chartConso` +
+				moduleId +
+				`"></canvas>`;
 		}
 	},
 
 	getScripts: function () {
-		return [
-			"d2l.js",
-			"https://cdn.jsdelivr.net/npm/chart.js"
-		];
+		return ["d2l.js", "https://cdn.jsdelivr.net/npm/chart.js"];
 	},
 
 	getDom: function () {
@@ -160,84 +133,110 @@ Module.register("MMM-D2L", {
 		if (notification === D2LApi.GET_DATA_RES) {
 			let moduleId = payload.moduleId;
 			let consoPerHour = payload.consoPerHour;
-			let instant = payload.instant;
-			let last24Hour = payload.last24Hour;
-			let trends = payload.trends;
+			let conso = payload.conso;
+			let price = payload.price;
 			let lastIndex = payload.lastIndex;
 			let hphcMode = payload.hphcMode;
-			this.updateChart(moduleId, consoPerHour, instant, last24Hour, trends, lastIndex, hphcMode);
-			Log.info(`${this.name} : indexes received`);
+			this.updateChart(
+				moduleId,
+				consoPerHour,
+				conso,
+				price,
+				lastIndex,
+				hphcMode
+			);
 		}
 	},
 
 	fetchData: function () {
 		Log.info(`${this.name} : fetch data`);
-		this.sendSocketNotification(D2LApi.GET_DATA_REQ,
-			{
-				login: this.config.login,
-				password: this.config.password,
-				configHeuresCreuses: this.config.heuresCreuses,
-				nbHoursToFetch: this.config.nbHoursToFetch
-			}
-		);
+		this.sendSocketNotification(D2LApi.GET_DATA_REQ, {
+			login: this.config.login,
+			password: this.config.password,
+			configHeuresCreuses: this.config.heuresCreuses,
+			nbHoursToFetch: 24 * 3,
+		});
 	},
 
-	updateChart: function (moduleId, consoPerHour, instant, last24Hour, trends, lastIndex, hphc) {
-
-		if (document.getElementById('linkyId')) {
+	updateChart: function (
+		moduleId,
+		consoPerHour,
+		conso,
+		price,
+		lastIndex,
+		hphc
+	) {
+		if (document.getElementById("linkyId")) {
 			//redefine id for all elements only for the first element
-			document.getElementById('linkyId').setAttribute('id', 'linkyId' + moduleId);
-			document.getElementById('hc-name').setAttribute('id', 'hc-name' + moduleId);
-			document.getElementById('hp-name').setAttribute('id', 'hp-name' + moduleId);
-			document.getElementById('HC').setAttribute('id', 'HC' + moduleId);
-			document.getElementById('HP').setAttribute('id', 'HP' + moduleId);
-			document.getElementById('instant').setAttribute('id', 'instant' + moduleId);
-			document.getElementById('last-24h-price').setAttribute('id', 'last-24h-price' + moduleId);
-			document.getElementById('trends-ico').setAttribute('id', 'trends-ico' + moduleId);
-			document.getElementById('trends-index').setAttribute('id', 'trends-index' + moduleId);
-			document.getElementById('chartConso').setAttribute('id', 'chartConso' + moduleId);
+			document
+				.getElementById("linkyId")
+				.setAttribute("id", "linkyId" + moduleId);
+			document
+				.getElementById("hc-name")
+				.setAttribute("id", "hc-name" + moduleId);
+			document
+				.getElementById("hp-name")
+				.setAttribute("id", "hp-name" + moduleId);
+			document.getElementById("HC").setAttribute("id", "HC" + moduleId);
+			document.getElementById("HP").setAttribute("id", "HP" + moduleId);
+			document
+				.getElementById("conso-instant")
+				.setAttribute("id", "conso-instant" + moduleId);
+			document
+				.getElementById("price-instant")
+				.setAttribute("id", "price-instant" + moduleId);
+			document
+				.getElementById("conso-j-1")
+				.setAttribute("id", "conso-j-1" + moduleId);
+			document
+				.getElementById("price-j-1")
+				.setAttribute("id", "price-j-1" + moduleId);
+			document
+				.getElementById("conso-j-2")
+				.setAttribute("id", "conso-j-2" + moduleId);
+			document
+				.getElementById("price-j-2")
+				.setAttribute("id", "price-j-2" + moduleId);
+			document
+				.getElementById("conso-j-3")
+				.setAttribute("id", "conso-j-3" + moduleId);
+			document
+				.getElementById("price-j-3")
+				.setAttribute("id", "price-j-3" + moduleId);
 			if (this.config.showChart == true) {
 				this.createChart(moduleId, consoPerHour);
 			}
-		}
-		else if (document.getElementById('linkyId' + moduleId) === undefined) {
+		} else if (
+			document.getElementById("linkyId" + moduleId) === undefined
+		) {
 			//create new UI
 			this.createUI(this.wrapper, moduleId);
 		}
 
 		if (hphc) {
-			document.getElementById('hc-name' + moduleId).className = "d2l-name bright";
-			document.getElementById('hp-name' + moduleId).className = "d2l-name";
-			document.getElementById('HP' + moduleId).innerHTML = lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh";
-			document.getElementById('HC' + moduleId).innerHTML = "<b>" + lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh" + "</b>";
-			document.getElementById('hp-name' + moduleId).innerHTML = "HP";
-			document.getElementById('hc-name' + moduleId).innerHTML = "<b>HC</b>";
+			document.getElementById("HP" + moduleId).innerHTML = lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh";
+			document.getElementById("HC" + moduleId).innerHTML = "<b>" + lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh" + "</b>";
+			document.getElementById("hp-name" + moduleId).innerHTML = "HP";
+			document.getElementById("hc-name" + moduleId).innerHTML = "<b>HC</b>";
+		} else {
+			document.getElementById("HP" + moduleId).innerHTML = "<b>" + lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh" + "</b>";
+			document.getElementById("HC" + moduleId).innerHTML = lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh";
+			document.getElementById("hp-name" + moduleId).innerHTML = "<b>HP</b>";
+			document.getElementById("hc-name" + moduleId).innerHTML = "HC";
 		}
-		else {
-			document.getElementById('hc-name' + moduleId).className = "d2l-name";
-			document.getElementById('hp-name' + moduleId).className = "d2l-name bright";
-			document.getElementById('HP' + moduleId).innerHTML = "<b>" + lastIndex.hchpEjphpmBbrhpjb / 1000 + " kWh" + "</b>";
-			document.getElementById('HC' + moduleId).innerHTML = lastIndex.baseHchcEjphnBbrhcjb / 1000 + " kWh";
-			document.getElementById('hp-name' + moduleId).innerHTML = "<b>HP</b>";
-			document.getElementById('hc-name' + moduleId).innerHTML = "HC";
-		}
-		
-		document.getElementById('last-24h-price' + moduleId).innerHTML = 
-				parseFloat(((last24Hour.hc/1000)*this.config.price.hc)+((last24Hour.hp/1000)*this.config.price.hp)).toFixed(4) + ' ' + this.config.currency;
 
-		document.getElementById('instant' + moduleId).innerHTML = parseFloat(instant).toString() + " W";
+		document.getElementById("conso-instant" + moduleId).innerHTML = parseFloat(conso.instant).toString() + " W" ;
+		document.getElementById("price-instant" + moduleId).innerHTML = parseFloat(price.instant).toString() + " " + this.config.currency;
+		document.getElementById("conso-j-1" + moduleId).innerHTML = parseFloat(conso.j1).toString() + " W" ;
+		document.getElementById("price-j-1" + moduleId).innerHTML = parseFloat(price.j1).toString() + " " + this.config.currency;
+		document.getElementById("conso-j-2" + moduleId).innerHTML = parseFloat(conso.j2).toString() + " W" ;
+		document.getElementById("price-j-2" + moduleId).innerHTML = parseFloat(price.j2).toString() + " " + this.config.currency;
+		document.getElementById("conso-j-3" + moduleId).innerHTML = parseFloat(conso.j3).toString() + " W" ;
+		document.getElementById("price-j-3" + moduleId).innerHTML = parseFloat(price.j3).toString() + " " + this.config.currency;
+
 		if (this.config.showCompteurId) {
-			document.getElementById('linkyId' + moduleId).innerHTML = "Linky : " + moduleId;
-		}
-		if (trends < 0) {
-			document.getElementById('trends-ico' + moduleId).innerHTML = svgGraphDown;
-			document.getElementById('trends-ico' + moduleId).setAttribute('style', 'color: #198754');
-			document.getElementById('trends-index' + moduleId).innerHTML = trends + ' W ';
-		}
-		else {
-			document.getElementById('trends-ico' + moduleId).innerHTML = svgGraphUp;
-			document.getElementById('trends-ico' + moduleId).setAttribute('style', 'color: #dc3545');
-			document.getElementById('trends-index' + moduleId).innerHTML = '+' + trends + ' W ';
+			document.getElementById("linkyId" + moduleId).innerHTML =
+				"Linky : " + moduleId;
 		}
 
 		if (this.config.showChart == true) {
@@ -246,14 +245,14 @@ Module.register("MMM-D2L", {
 				consoPerHour.map(({ hour }) => hour),
 				[
 					consoPerHour.map(({ consoHC }) => consoHC),
-					consoPerHour.map(({ consoHP }) => consoHP)
+					consoPerHour.map(({ consoHP }) => consoHP),
 				]
 			);
 		}
 	},
 
 	updateData: function (chartId, label, data) {
-		this.charts.forEach(chart => {
+		this.charts.forEach((chart) => {
 			if (chart.moduleId == chartId) {
 				chart.chart.data.labels = label;
 				chart.chart.data.datasets[0].data = data[0];
@@ -264,59 +263,59 @@ Module.register("MMM-D2L", {
 	},
 
 	createChart: function (moduleId, consoPerHour) {
-		Chart.defaults.color = 'lightgrey';
+		Chart.defaults.color = "lightgrey";
 		this.charts.push({
-			moduleId, chart: new Chart(document.getElementById('chartConso' + moduleId), {
-				type: 'bar',
+			moduleId,
+			chart: new Chart(document.getElementById("chartConso" + moduleId), {
+				type: "bar",
 				data: {
 					labels: consoPerHour.map(({ hour }) => hour),
 					datasets: [
 						{
-							label: 'HC',
+							label: "HC",
 							data: consoPerHour.map(({ consoHC }) => consoHC),
 							borderWidth: 2,
 						},
 						{
-							label: 'HP',
+							label: "HP",
 							data: consoPerHour.map(({ consoHP }) => consoHP),
 							borderWidth: 2,
 						},
-					]
+					],
 				},
 				options: {
 					maintainAspectRatio: true,
 					scales: {
 						x: {
 							ticks: {
-								color: 'lightgrey'
+								color: "lightgrey",
 							},
-							border:
-							{
-								color: 'lightgrey',
+							border: {
+								color: "lightgrey",
 							},
 							grid: {
-								color: 'lightgrey',
-								borderColor: 'lightgrey'
-							}
+								color: "lightgrey",
+								borderColor: "lightgrey",
+							},
 						},
 						y: {
 							min: 0,
 							max: this.config.contract,
 							ticks: {
-								color: 'lightgrey'
+								color: "lightgrey",
+								stepSize: 1000
 							},
-							border:
-							{
-								color: 'lightgrey',
+							border: {
+								color: "lightgrey",
 							},
 							grid: {
-								color: 'lightgrey',
-								borderColor: 'lightgrey'
-							}
+								color: "lightgrey",
+								borderColor: "lightgrey",
+							},
 						},
 					},
-				}
-			})
+				},
+			}),
 		});
 	},
 });
