@@ -84,7 +84,7 @@ function parseIndex(configHeuresCreuses, moduleId, response) {
 				new Date(element.horloge) - new Date().getHours() * 60 * 60 * 1000
 			).toISOString();
 			
-			Log.log(this.name + " : startOfCurrentDay " + startOfCurrentDay);
+			Log.log(" : startOfCurrentDay " + startOfCurrentDay);
 		} 
 		
 		/*else {
