@@ -38,16 +38,16 @@ modules: [
       login: "",
       password: "",
       contract:6000,
+      updateInterval: 60 * 60 * 1000 
       showCompteurId: true,
-      showChart: true,
       heuresCreuses:[
         {
-          start:0,
-          end:6
+          start:1,
+          end:7
         },
         {
           start:11,
-          end:14
+          end:13
         },
       ],
 		  price: 
@@ -65,17 +65,14 @@ modules: [
 
 The following properties can be configured:
 
-
-
 |Option|Default|Description|
 |---|---|---|
 |`login`|`""`|Set the login from https://d2l.sicame.io/.|
 |`password`|`""`|Set the password from https://d2l.sicame.io/.|
 |`contract`|`6000`|Set the max Watt contract subscribed.|
 |`showCompteurId`|`false`|Show 'Compteur Id'.|
-|`showChart`|`true`|Show Chart.|
 |`updateInterval`|`60 * 60 * 1000`|How often (in ms) to fetch data.|
-|`heuresCreuses`|`[{start:0,end:6},{start:11,end:14}]`|set the hours of each 'heures creuses' from start to end.|
+|`heuresCreuses`|`[{start:1,end:7},{start:11,end:13}]`|set the hours of each 'heures creuses' from start to end.|
 |`price`|`{ hc: 0.1470, hp: 0.1841 }`|set the price of each 'heures creuses' and 'heures pleines'.|
 |`currency`|`€`|set the currency'.|
 

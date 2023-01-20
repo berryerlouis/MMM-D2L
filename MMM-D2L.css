@@ -13,10 +13,30 @@
 	padding-left: 1rem;
 }
 
-.d2l-chart {
-	margin-left: auto;
-	display: block;
-	box-sizing: border-box;
-	height: 200px;
-	width: 350px;
+.d2l-table tr:nth-child(3) {
+	opacity: 1;
+}
+
+.d2l-table tr:nth-child(4) {
+	opacity: 1;
+}
+
+.d2l-table tr:nth-child(5) {
+	opacity: .9;
+}
+
+.d2l-table tr:nth-child(6) {
+	opacity: .8;
+}
+
+.d2l-table tr:nth-child(7) {
+	opacity: .75;
+}
+
+.d2l-table tr:nth-child(8) {
+	opacity: .65;
+}
+
+.d2l-table tr:nth-child(9) {
+	opacity: .5;
 }
