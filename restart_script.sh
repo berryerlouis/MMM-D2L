@@ -1,0 +1,1 @@
+cd ~/MagicMirror/modules && pm2 stop 0 && rm -rf MMM-D2L && git clone https://github.com/berryerlouis/MMM-D2L.git && cd MMM-D2L && git checkout dev && npm install  && cd .. && pm2 restart 0 && pm2 log
