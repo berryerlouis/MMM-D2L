@@ -8,6 +8,46 @@
     <link rel="stylesheet" href="MMM-D2L.css" />
   </head>
   <body>
+
+    <div style="width: 500px;"><canvas id="myChart"></canvas></div>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <script>
+      const ctx = document.getElementById('myChart');
+      function dayOfWeekAsString(day) {
+        return ["Sunday", "Monday","Tuesday","Wednesday","Thursday","Friday","Saturday"].indexOf(day);
+      }
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: [
+            new Date().getDay(), 
+            new Date().getDay() - 1, 
+            new Date().getDay() - 2, 
+            new Date().getDay() - 3, 
+            new Date().getDay() - 4, 
+            new Date().getDay() - 5, 
+            new Date().getDay() - 6],
+          datasets: [{
+            label: 'Consomation',
+            data: [12, 19, 3, 5, 2, 3, 7],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true
+            }
+          }
+        }
+      });
+    </script>
+    
+    
+    
+    
     <div id="module_8_MMM-D2L" class="module MMM-D2L MMM-D2L">
       <header class="module-header" style="display: block">Consomation</header>
       <div class="module-content">
@@ -15,40 +55,49 @@
           <div id="linkyId22102000007" class="title">Linky</div>
           <table class="d2l-table">
             <tbody>
-              <tr>
-                <td class="d2l-name" id="hc-name22102000007">HC</td>
-                <td class="d2l-value" id="HC22102000007" colspan="2">
-                  1592.198 kWh
-                </td>
-              </tr>
-              <tr>
-                <td class="d2l-name" id="hp-name22102000007"><b>HP</b></td>
-                <td class="d2l-value" id="HP22102000007" colspan="2">
-                  <b>1292.287 kWh</b>
-                </td>
-              </tr>
-              <tr>
-                <td class="d2l-name">Conso instantannée</td>
-                <td class="d2l-value" id="instant22102000007">303 W</td>
-                <td class="d2l-value" id="last-24h-price22102000007">
-                  2.7370 €
-                </td>
-              </tr>
-              <tr>
-                <td class="d2l-name">Conso Jour-1</td>
-                <td class="d2l-value" id="instant22102000007">303 W</td>
-                <td class="d2l-value" id="last-24h-price22102000007">2.7370 €</td>
-              </tr>
-              <tr>
-                <td class="d2l-name">Conso Jour-2</td>
-                <td class="d2l-value" id="instant22102000007">303 W</td>
-                <td class="d2l-value" id="last-24h-price22102000007">2.7370 €</td>
-              </tr>
-              <tr>
-                <td class="d2l-name">Conso Jour-3</td>
-                <td class="d2l-value" id="instant22102000007">303 W</td>
-                <td class="d2l-value" id="last-24h-price22102000007">2.7370 €</td>
-              </tr>
+            <tr>
+              <td class="d2l-name" id="hc-name" colspan="2">HC</td>
+              <td class="d2l-value" id="HC` + moduleId + `"></td>
+            </tr>
+            <tr>
+              <td class="d2l-name" id="hp-name" colspan="2"><b>HP</b></td>
+              <td class="d2l-value" id="HP` + moduleId + `"></td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour</td>
+              <td class="d2l-value" id="conso-j-0` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-0` + moduleId + `">0 €</td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour-1</td>
+              <td class="d2l-value" id="conso-j-1` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-1` + moduleId + `">0 €</td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour-2</td>
+              <td class="d2l-value" id="conso-j-2` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-2` + moduleId + `">0 €</td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour-3</td>
+              <td class="d2l-value" id="conso-j-3` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-3` + moduleId + `">0 €</td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour-4</td>
+              <td class="d2l-value" id="conso-j-4` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-4` + moduleId + `">0 €</td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour-5</td>
+              <td class="d2l-value" id="conso-j-5` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-5` + moduleId + `">0 €</td>
+            </tr>
+            <tr>
+              <td class="d2l-name">Conso Jour-6</td>
+              <td class="d2l-value" id="conso-j-6` + moduleId + `">0 W</td>
+              <td class="d2l-value" id="price-j-6` + moduleId + `">0 €</td>
+            </tr>
             </tbody>
           </table>
         </div>
