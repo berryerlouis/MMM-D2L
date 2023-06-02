@@ -75,7 +75,7 @@ function parseIndex(priceHPHC, configHeuresCreuses, moduleId, response) {
 		new Date(response[0].horloge).getFullYear(),
 		new Date(response[0].horloge).getMonth(),
 		new Date(response[0].horloge).getDate(),
-		1,
+		0,
 		0,
 		0
 	).toISOString();
