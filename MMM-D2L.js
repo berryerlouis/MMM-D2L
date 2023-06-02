@@ -9,7 +9,7 @@ const labels = ["j-1","j-2","j-3","j-4","j-5","j-6","j-7"];
 Module.register("MMM-D2L", {
 	// Default module config
 	defaults: {
-		updateInterval: 600000,
+		updateInterval: 60000,
 		login: "",
 		password: "",
 		heuresCreuses: [
@@ -22,7 +22,7 @@ Module.register("MMM-D2L", {
 		},
 		currency: "€",
 		contract: 6000,
-		showCompteurId: true,
+		showCompteurId: false,
 		showChart: true,
 		nbDaysToFetch: 7,
 	},
@@ -57,17 +57,41 @@ Module.register("MMM-D2L", {
 						<td class="d2l-name" id="hp-name" colspan="2"><b>HP</b></td>
 						<td class="d2l-value" id="HP` + moduleId + `"></td>
 					</tr>
-					` ;
-					for (let index = 0; index < this.config.nbDaysToFetch; index++) {
-						divWrapper.innerHTML += 
-					`<tr>
-						<td class="d2l-name">Conso Jour</td>	
-						<td class="d2l-value" id="conso-j-`+ index + moduleId + `">0 W</td>
-						<td class="d2l-value" id="price-j-`+ index + moduleId + `">0 ` + this.config.currency + `</td>
-					</tr>`
-						
-					}
-					divWrapper.innerHTML += `
+					<tr>
+						<td class="d2l-name">Conso Jour</td>
+						<td class="d2l-value" id="conso-j-0` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-0` + moduleId + `">0 ` + this.config.currency + `</td>
+					</tr>
+					<tr>
+						<td class="d2l-name">Conso Jour-1</td>
+						<td class="d2l-value" id="conso-j-1` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-1` + moduleId + `">0 ` + this.config.currency + `</td>
+					</tr>
+					<tr>
+						<td class="d2l-name">Conso Jour-2</td>
+						<td class="d2l-value" id="conso-j-2` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-2` + moduleId + `">0 ` + this.config.currency + `</td>
+					</tr>
+					<tr>
+						<td class="d2l-name">Conso Jour-3</td>
+						<td class="d2l-value" id="conso-j-3` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-3` + moduleId + `">0 ` + this.config.currency + `</td>
+					</tr>
+					<tr>
+						<td class="d2l-name">Conso Jour-4</td>
+						<td class="d2l-value" id="conso-j-4` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-4` + moduleId + `">0 ` + this.config.currency + `</td>
+					</tr>
+					<tr>
+						<td class="d2l-name">Conso Jour-5</td>
+						<td class="d2l-value" id="conso-j-5` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-5` + moduleId + `">0 ` + this.config.currency + `</td>
+					</tr>
+					<tr>
+						<td class="d2l-name">Conso Jour-6</td>
+						<td class="d2l-value" id="conso-j-6` + moduleId + `">0 W</td>
+						<td class="d2l-value" id="price-j-6` + moduleId + `">0 ` + this.config.currency + `</td>
+						</tr>
 				</tbody>
 			</table>
 		`;
