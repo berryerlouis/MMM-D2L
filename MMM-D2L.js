@@ -9,7 +9,7 @@ const labels = ["j-1","j-2","j-3","j-4","j-5","j-6","j-7"];
 Module.register("MMM-D2L", {
 	// Default module config
 	defaults: {
-		updateInterval: 600000,
+		updateInterval: 60000,
 		login: "",
 		password: "",
 		heuresCreuses: [
@@ -22,8 +22,9 @@ Module.register("MMM-D2L", {
 		},
 		currency: "€",
 		contract: 6000,
-		showCompteurId: true,
+		showCompteurId: false,
 		showChart: true,
+		nbDaysToFetch: 7,
 	},
 	charts: [],
 
@@ -57,17 +58,17 @@ Module.register("MMM-D2L", {
 						<td class="d2l-value" id="HP` + moduleId + `"></td>
 					</tr>
 					<tr>
-						<td class="d2l-name">Conso Jour</td>	
+						<td class="d2l-name">Conso Jour</td>
 						<td class="d2l-value" id="conso-j-0` + moduleId + `">0 W</td>
 						<td class="d2l-value" id="price-j-0` + moduleId + `">0 ` + this.config.currency + `</td>
 					</tr>
 					<tr>
-						<td class="d2l-name">Conso Jour-1</td>	
+						<td class="d2l-name">Conso Jour-1</td>
 						<td class="d2l-value" id="conso-j-1` + moduleId + `">0 W</td>
 						<td class="d2l-value" id="price-j-1` + moduleId + `">0 ` + this.config.currency + `</td>
 					</tr>
 					<tr>
-						<td class="d2l-name">Conso Jour-2</td>	
+						<td class="d2l-name">Conso Jour-2</td>
 						<td class="d2l-value" id="conso-j-2` + moduleId + `">0 W</td>
 						<td class="d2l-value" id="price-j-2` + moduleId + `">0 ` + this.config.currency + `</td>
 					</tr>
@@ -90,7 +91,7 @@ Module.register("MMM-D2L", {
 						<td class="d2l-name">Conso Jour-6</td>
 						<td class="d2l-value" id="conso-j-6` + moduleId + `">0 W</td>
 						<td class="d2l-value" id="price-j-6` + moduleId + `">0 ` + this.config.currency + `</td>
-					</tr>
+						</tr>
 				</tbody>
 			</table>
 		`;
@@ -139,7 +140,7 @@ Module.register("MMM-D2L", {
 			login: this.config.login,
 			password: this.config.password,
 			configHeuresCreuses: this.config.heuresCreuses,
-			nbHoursToFetch: 24 * 7,
+			nbHoursToFetch: 24 * this.config.nbDaysToFetch,
 			price:this.config.price
 		});
 	},
@@ -213,7 +214,8 @@ Module.register("MMM-D2L", {
 	updateChart: function (chartId, labels, data) {
 		let dataAverage = [];
 		let average = (data.reduce((a, b) => a + b) / data.length ) / 10;
-		data = data.slice(0,7);
+		data = data.slice(0,this.config.nbDaysToFetch);
+		labels = labels.slice(0,this.config.nbDaysToFetch);
 		for (var i = 0; i < data.length; ++i) {
 			data[i] = parseInt(data[i]) / 10;
 			dataAverage.push(average);
@@ -231,7 +233,8 @@ Module.register("MMM-D2L", {
 	createChart: function (moduleId, labels, data) {
 		let dataAverage = [];
 		let average = data.reduce((a, b) => a + b) / data.length / 10;
-		data = data.slice(0,7);
+		data = data.slice(0,this.config.nbDaysToFetch);
+		labels = labels.slice(0,this.config.nbDaysToFetch);
 		for (var i = 0; i < data.length; ++i) {
 			data[i] = parseInt(data[i]) / 10;
 			dataAverage.push(average);
