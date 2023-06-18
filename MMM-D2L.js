@@ -4,7 +4,7 @@ const svgGraphDown =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-down-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 11.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-4a.5.5 0 0 0-1 0v2.6l-3.613-4.417a.5.5 0 0 0-.74-.037L7.06 8.233 3.404 3.206a.5.5 0 0 0-.808.588l4 5.5a.5.5 0 0 0 .758.06l2.609-2.61L13.445 11H10.5a.5.5 0 0 0-.5.5Z" /></svg>';
 const svgGraphUp =
 	'<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" fill="currentColor" class="bi bi-graph-up-arrow" viewBox="0 0 16 16"><path fill-rule="evenodd" d="M0 0h1v15h15v1H0V0Zm10 3.5a.5.5 0 0 1 .5-.5h4a.5.5 0 0 1 .5.5v4a.5.5 0 0 1-1 0V4.9l-3.613 4.417a.5.5 0 0 1-.74.037L7.06 6.767l-3.656 5.027a.5.5 0 0 1-.808-.588l4-5.5a.5.5 0 0 1 .758-.06l2.609 2.61L13.445 4H10.5a.5.5 0 0 1-.5-.5Z"/></svg>';
-const labels = ["j-1","j-2","j-3","j-4","j-5","j-6","j-7"];
+const labels = ["j", "j-1", "j-2", "j-3", "j-4", "j-5", "j-6"];
 
 Module.register("MMM-D2L", {
 	// Default module config
@@ -17,8 +17,8 @@ Module.register("MMM-D2L", {
 			{ start: 11, end: 13 },
 		],
 		price: {
-			hc: 0.147,
-			hp: 0.1841,
+			hc: 0.1828,
+			hp: 0.2460,
 		},
 		currency: "€",
 		contract: 6000,
@@ -141,7 +141,7 @@ Module.register("MMM-D2L", {
 			password: this.config.password,
 			configHeuresCreuses: this.config.heuresCreuses,
 			nbHoursToFetch: 24 * this.config.nbDaysToFetch,
-			price:this.config.price
+			price: this.config.price
 		});
 	},
 
@@ -166,11 +166,11 @@ Module.register("MMM-D2L", {
 		}
 	},
 
-	updateId: function(moduleId,conso){
+	updateId: function (moduleId, conso) {
 		//redefine id for all elements only for the first element
 		document
 			.getElementById("linkyId")
-			.setAttribute("id", "linkyId" + moduleId);		
+			.setAttribute("id", "linkyId" + moduleId);
 		if (this.config.showCompteurId) {
 			document.getElementById("linkyId" + moduleId).innerHTML =
 				"Linky : " + moduleId;
@@ -183,7 +183,7 @@ Module.register("MMM-D2L", {
 			.setAttribute("id", "hp-name" + moduleId);
 		document.getElementById("HC").setAttribute("id", "HC" + moduleId);
 		document.getElementById("HP").setAttribute("id", "HP" + moduleId);
-		for (let index = 0; index < 7; index++) {			
+		for (let index = 0; index < 7; index++) {
 			document.getElementById("conso-j-" + index).setAttribute("id", "conso-j-" + index + moduleId);
 			document.getElementById("price-j-" + index).setAttribute("id", "price-j-" + index + moduleId);
 		}
@@ -205,17 +205,17 @@ Module.register("MMM-D2L", {
 			document.getElementById("hp-name" + moduleId).innerHTML = "<b>HP</b>";
 			document.getElementById("hc-name" + moduleId).innerHTML = "HC";
 		}
-		for (let index = 0; index < 7; index++) {			
-			document.getElementById("conso-j-" + index + moduleId).innerHTML = parseFloat(conso[index]).toString() + " W" ;
+		for (let index = 0; index < 7; index++) {
+			document.getElementById("conso-j-" + index + moduleId).innerHTML = parseFloat(conso[index]).toString() + " W";
 			document.getElementById("price-j-" + index + moduleId).innerHTML = parseFloat(price[index]).toFixed(4) + " " + this.config.currency;
 		}
 	},
 
 	updateChart: function (chartId, labels, data) {
 		let dataAverage = [];
-		let average = (data.reduce((a, b) => a + b) / data.length ) / 10;
-		data = data.slice(0,this.config.nbDaysToFetch);
-		labels = labels.slice(0,this.config.nbDaysToFetch);
+		let average = (data.reduce((a, b) => a + b) / data.length) / 10;
+		data = data.slice(0, this.config.nbDaysToFetch);
+		labels = labels.slice(0, this.config.nbDaysToFetch);
 		for (var i = 0; i < data.length; ++i) {
 			data[i] = parseInt(data[i]) / 10;
 			dataAverage.push(average);
@@ -225,7 +225,7 @@ Module.register("MMM-D2L", {
 				chart.chart.data.labels = labels;
 				chart.chart.data.datasets[0].data = data;
 				chart.chart.data.datasets[1].data = dataAverage,
-				chart.chart.update();
+					chart.chart.update();
 			}
 		});
 	},
@@ -233,8 +233,8 @@ Module.register("MMM-D2L", {
 	createChart: function (moduleId, labels, data) {
 		let dataAverage = [];
 		let average = data.reduce((a, b) => a + b) / data.length / 10;
-		data = data.slice(0,this.config.nbDaysToFetch);
-		labels = labels.slice(0,this.config.nbDaysToFetch);
+		data = data.slice(0, this.config.nbDaysToFetch);
+		labels = labels.slice(0, this.config.nbDaysToFetch);
 		for (var i = 0; i < data.length; ++i) {
 			data[i] = parseInt(data[i]) / 10;
 			dataAverage.push(average);
