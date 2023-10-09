@@ -17,8 +17,8 @@ Module.register("MMM-D2L", {
 			{ start: 11, end: 13 },
 		],
 		price: {
-			hc: 0.147,
-			hp: 0.1841,
+			hc: 0.1828,
+			hp: 0.2460,
 		},
 		currency: "€",
 		contract: 6000,
